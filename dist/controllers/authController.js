@@ -40,9 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.login = void 0;
-var user_1 = require("../models/user");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var authService = new user_1.UserStore();
+var Auth_1 = require("../models/Auth");
 var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, user, token, err_1;
     return __generator(this, function (_b) {
@@ -50,7 +49,7 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
             case 0:
                 _b.trys.push([0, 2, , 3]);
                 _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, login(email, password)];
+                return [4 /*yield*/, Auth_1.authService.login(email, password)];
             case 1:
                 user = _b.sent();
                 token = jsonwebtoken_1["default"].sign({ user: user }, process.env.TOKEN_SECRET);
@@ -59,7 +58,7 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
             case 2:
                 err_1 = _b.sent();
                 res.status(401);
-                res.json({ err: err_1 });
+                res.json(err_1.message);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

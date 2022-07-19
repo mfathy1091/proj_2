@@ -39,77 +39,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.destroy = exports.create = exports.show = exports.index = void 0;
-var user_1 = require("../models/user");
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var store = new user_1.UserStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
-            case 1:
-                users = _a.sent();
-                res.json(users);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.index = index;
-var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.show(req.body.id)];
-            case 1:
-                user = _a.sent();
-                res.json(user);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.show = show;
-var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, err_1;
+exports.orderService = void 0;
+var database_1 = __importDefault(require("../config/database"));
+var order_1 = require("../models/order");
+var store = new order_1.OrderStore();
+var getStaus = function (orderId) { return __awaiter(void 0, void 0, void 0, function () {
+    var conn, sql, result, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                user = {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    email: req.body.email,
-                    password: req.body.password
-                };
-                _a.label = 1;
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, database_1["default"].connect()];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, store.create(user)];
+                conn = _a.sent();
+                sql = 'SELECT * FROM orders WHERE id=($1)';
+                return [4 /*yield*/, conn.query(sql, [orderId])];
             case 2:
-                newUser = _a.sent();
-                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
-                res.json(token);
-                return [3 /*break*/, 4];
+                result = _a.sent();
+                return [2 /*return*/, result.rows[0]];
             case 3:
                 err_1 = _a.sent();
-                console.log(err_1);
-                res.status(500);
-                res.json(err_1.message + user);
-                return [3 /*break*/, 4];
+                throw new Error("Could not getStatus of order ".concat(orderId, ". Error: ").concat(err_1));
             case 4: return [2 /*return*/];
         }
     });
 }); };
-exports.create = create;
-var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store["delete"](req.body.id)];
-            case 1:
-                deleted = _a.sent();
-                res.json(deleted);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.destroy = destroy;
+exports.orderService = {
+    getStaus: getStaus
+};

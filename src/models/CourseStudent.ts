@@ -1,15 +1,17 @@
-import client from "../config/database";
-import { BaseCourse, makeCourseStore } from "../models/Course";
+//@ts-ignore
+import pool from "../config/database";
+import { BaseCourse, CourseTable } from "./Course";
 
 type Course = Omit<BaseCourse, "instructor_id"> & {
 	instructor: { id: number; name: string };
 	students: { id: number; name: string; grade: string }[];
 };
 
-const courseModel = makeCourseStore();
+
 
 async function getOne(courseId: number): Promise<Course> {
-	const connection = await client.connect();
+	//@ts-ignore
+	const connection = await pool.connect();
 	try {
 		const result = await connection.query(
 			`
@@ -36,6 +38,7 @@ async function getOne(courseId: number): Promise<Course> {
 				id: result.rows[0].instructorId,
 				name: result.rows[0].instructorName,
 			},
+			//@ts-ignore
 			students: result.rows.map((row) => ({
 				id: row.studentId,
 				name: row.studentName,
@@ -48,7 +51,8 @@ async function getOne(courseId: number): Promise<Course> {
 }
 
 async function enroll(courseId: number, studentId: number): Promise<void> {
-	const connection = await client.connect();
+	//@ts-ignore
+	const connection = await pool.connect();
 	try {
 		await connection.query(
 			"INSERT INTO course_student (student_id, course_id) VALUES($1, $2);",
@@ -67,7 +71,8 @@ async function setGrade(
 	studentId: number,
 	grade: string
 ): Promise<void> {
-	const connection = await client.connect();
+	//@ts-ignore
+	const connection = await pool.connect();
 	try {
 		await connection.query(
 			"UPDATE course_student SET grade = $1 WHERE course_id = $2 AND student_id = $3;",
@@ -81,11 +86,11 @@ async function setGrade(
 	}
 }
 
-export const courseService = {
+export const CourseStudentTable = {
 	getOne,
 	enroll,
 	setGrade,
-	add: courseModel.add,
-	remove: courseModel.remove,
+	add: CourseTable.add,
+	remove: CourseTable.remove,
 	// update: courseModel.update,
 };

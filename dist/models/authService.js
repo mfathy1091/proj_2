@@ -39,77 +39,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.destroy = exports.create = exports.show = exports.index = void 0;
-var user_1 = require("../models/user");
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var store = new user_1.UserStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
-            case 1:
-                users = _a.sent();
-                res.json(users);
-                return [2 /*return*/];
-        }
+exports.authService = void 0;
+var database_1 = __importDefault(require("../config/database"));
+var bcrypt_1 = __importDefault(require("bcrypt"));
+// let saltRounds = process.env.SALT_ROUND
+var pepper = process.env.BCRYPT_PASSWORD;
+function login(email, password) {
+    return __awaiter(this, void 0, void 0, function () {
+        var connection, sql, result, hashPassword, isPasswordValid, result_1, user, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 5, , 6]);
+                    return [4 /*yield*/, database_1["default"].connect()];
+                case 1:
+                    connection = _a.sent();
+                    sql = 'SELECT password_digest FROM users WHERE email=($1)';
+                    return [4 /*yield*/, connection.query(sql, [email])];
+                case 2:
+                    result = _a.sent();
+                    if (!result.rows.length) return [3 /*break*/, 4];
+                    hashPassword = result.rows[0].password_digest;
+                    isPasswordValid = bcrypt_1["default"].compareSync(password + pepper, hashPassword);
+                    if (!isPasswordValid) return [3 /*break*/, 4];
+                    return [4 /*yield*/, connection.query('SELECT id, email, first_name, last_name FROM users WHERE email=($1)', [email])];
+                case 3:
+                    result_1 = _a.sent();
+                    user = result_1.rows[0];
+                    return [2 /*return*/, user];
+                case 4:
+                    connection.release();
+                    return [2 /*return*/, null];
+                case 5:
+                    err_1 = _a.sent();
+                    throw new Error("Unable to login: ".concat(err_1.message));
+                case 6: return [2 /*return*/];
+            }
+        });
     });
-}); };
-exports.index = index;
-var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.show(req.body.id)];
-            case 1:
-                user = _a.sent();
-                res.json(user);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.show = show;
-var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                user = {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    email: req.body.email,
-                    password: req.body.password
-                };
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, store.create(user)];
-            case 2:
-                newUser = _a.sent();
-                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
-                res.json(token);
-                return [3 /*break*/, 4];
-            case 3:
-                err_1 = _a.sent();
-                console.log(err_1);
-                res.status(500);
-                res.json(err_1.message + user);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-exports.create = create;
-var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store["delete"](req.body.id)];
-            case 1:
-                deleted = _a.sent();
-                res.json(deleted);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.destroy = destroy;
+}
+exports.authService = {
+    login: login
+};

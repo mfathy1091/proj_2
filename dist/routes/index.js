@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
-// import imageRouter from './api/imageRouter';
-// import validate from '../validations/imageValidation';
-var userRouter_1 = __importDefault(require("./api/userRouter"));
-var authRouter_1 = __importDefault(require("./api/authRouter"));
+var User_1 = __importDefault(require("./User"));
+var auth_1 = __importDefault(require("./auth"));
+var Order_1 = __importDefault(require("./Order"));
+var Product_1 = __importDefault(require("./Product"));
 var router = express_1["default"].Router();
-// Middleware to validate the user input
-// router.use('/images', validate, imageRouter);
-router.use('/users', userRouter_1["default"]);
-router.use('/auth', authRouter_1["default"]);
+router.use('/users', User_1["default"]);
+router.use('/auth', auth_1["default"]);
+router.use('/products', Product_1["default"]);
+router.use('/orders', Order_1["default"]);
 exports["default"] = router;

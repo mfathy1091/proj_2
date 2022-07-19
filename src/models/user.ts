@@ -1,14 +1,8 @@
+//@ts-ignore
 import pool from '../config/database';
 import bcrypt from 'bcrypt'
 import { Connection } from 'pg';
-// import { User } from '../types/user'
-export type User = {
-    id: number,
-    first_name: string,
-    last_name: string,
-    email: string,
-    password: string,
-}
+import { User } from '../types/user'
 
 let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD
@@ -17,6 +11,7 @@ let pepper = process.env.BCRYPT_PASSWORD
 export class UserStore {
 
     async index(): Promise<User[]> {
+        //@ts-ignore
         const connection = await pool.connect();
         try {
             const sql = `SELECT * FROM users`;
@@ -32,6 +27,7 @@ export class UserStore {
 
     async show(id: string): Promise<User> {
         try {
+            //@ts-ignore
             const connection = await pool.connect();
             const sql = 'SELECT * FROM users WHERE id=($1)';
             const result = await connection.query(sql, [id]);
@@ -46,7 +42,7 @@ export class UserStore {
         try {
             // @ts-ignore
             const conn = await pool.connect()
-            const sql = 'INSERT INTgO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
+            const sql = 'INSERT INTO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
 
             const hash = bcrypt.hashSync(
                 user.password + pepper,
@@ -68,6 +64,7 @@ export class UserStore {
 
     async update(id: string, u: User): Promise<User> {
         try {
+            //@ts-ignore
             const connection = await pool.connect();
             const sql = "UPDATE users SET first_name = $1, last_name = $2, email = $3 WHERE id=$5";
             const result = await connection.query(sql, [u.first_name, u.last_name, u.email]);
@@ -81,6 +78,7 @@ export class UserStore {
 
     async delete(id: string): Promise<void> {
         try {
+            //@ts-ignore
             const connection = await pool.connect();
             const sql = "DELETE FROM users WHERE id=$1";
             const result = await connection.query(sql, [id]);

@@ -7,7 +7,6 @@ const store = new ProductStore()
 const index = async (_req: Request, res: Response) => {
     const products = await store.index()
     res.json(products)
-    console.log('index')
 }
 
 const show = async (req: Request, res: Response) => {
@@ -16,16 +15,18 @@ const show = async (req: Request, res: Response) => {
 }
 
 const create = async (req: Request, res: Response) => {
-    const product: Omit<Product, "id"> = {
+    const product: Product = {
         name: req.body.name,
         price: req.body.price,
     }
     try {
         const newProduct = await store.create(product)
+        console.log(newProduct)
+        res.status(201)
         res.json(newProduct)
     } catch(err) {
-        res.status(400)
-        res.json(err)
+        res.status(500)
+        res.json(err.message)
     }
 }
 
@@ -38,8 +39,8 @@ const update = async (req: Request, res: Response) => {
         const newProduct = await store.update(req.params.productID, product)
         res.json(newProduct)
     } catch(err) {
-        res.status(400)
-        res.json(err)
+        res.status(500)
+        res.json(err.message)    
     }
 }
 

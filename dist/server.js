@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
 var morgan_1 = __importDefault(require("morgan"));
 var index_1 = __importDefault(require("./routes/index"));
 var ErrorMiddleware_1 = __importDefault(require("./middlewares/ErrorMiddleware"));
 var app = (0, express_1["default"])();
 var address = "0.0.0.0:3000";
-app.use(body_parser_1["default"].json());
+app.use(express_1["default"].json());
+app.use(express_1["default"].urlencoded());
 app.get('/', function (req, res) {
     res.send('Hello World!');
 });

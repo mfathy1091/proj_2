@@ -10,6 +10,7 @@ var verifyAuthToken = function (req, res, next) {
         if (!authorizationHeader) {
             // throw new Error('Not Authorized');
         }
+        //@ts-ignore
         var token = authorizationHeader.split(' ')[1];
         var decoded = jsonwebtoken_1["default"].verify(token, process.env.TOKEN_SECRET);
         next(); // No error proceed to next middleware

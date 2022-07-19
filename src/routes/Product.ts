@@ -1,7 +1,4 @@
 import express from 'express';
-import { Request, Response } from 'express';
-import { Product, ProductStore } from '../../models/product';
-
 
 import { 
     index,
@@ -9,9 +6,8 @@ import {
     create,
     update,
     destroy
-}  from '../../controllers/ProductController'
+}  from '../controllers/ProductController'
 
-const store = new ProductStore();
 const productRouter = express.Router();
 
 productRouter.get('/', index)

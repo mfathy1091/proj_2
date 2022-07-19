@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express'
-import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import router from './routes/index';
 import ErrorMiddleware from './middlewares/ErrorMiddleware'
@@ -7,7 +6,8 @@ import ErrorMiddleware from './middlewares/ErrorMiddleware'
 const app: express.Application = express()
 const address: string = "0.0.0.0:3000"
 
-app.use(bodyParser.json())
+app.use(express.json())
+app.use(express.urlencoded());
 
 app.get('/', function (req: Request, res: Response) {
     res.send('Hello World!')

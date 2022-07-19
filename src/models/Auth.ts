@@ -1,4 +1,5 @@
 
+//@ts-ignore
 import pool from '../config/database';
 import bcrypt from 'bcrypt'
 import { Connection } from 'pg';
@@ -9,6 +10,7 @@ let pepper = process.env.BCRYPT_PASSWORD
 
 async function login(email: string, password: string): Promise<User | null> {
     try {
+        //@ts-ignore
         const connection = await pool.connect()
         const sql = 'SELECT password_digest FROM users WHERE email=($1)'
         const result = await connection.query(sql, [email])

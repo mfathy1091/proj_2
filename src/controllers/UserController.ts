@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { User, UserStore } from '../models/user'
+import { UserStore } from '../models/user'
+import { User } from '../types/user'
+
 import jwt from 'jsonwebtoken'
 
 
@@ -8,7 +10,6 @@ const store = new UserStore()
 const index = async (_req: Request, res: Response) => {
     const users = await store.index()
     res.json(users)
-    console.log('index')
 }
 
 const show = async (req: Request, res: Response) => {
@@ -17,7 +18,7 @@ const show = async (req: Request, res: Response) => {
 }
 
 const create = async (req: Request, res: Response) => {
-    const user: Omit<User, "id"> = {
+    const user: User = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
@@ -25,13 +26,12 @@ const create = async (req: Request, res: Response) => {
     }
     try {
         const newUser = await store.create(user)
-        let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET)
+        let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as unknown as string)
         res.json(token)
     } catch(err) {
         console.log(err)
         res.status(500)
-        res.json(err + user)
-        
+        res.json(err.message + user)
     }
 }
 
