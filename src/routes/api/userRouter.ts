@@ -7,7 +7,7 @@ import verifyAuthToken from '../../middlewares/AuthMiddleware'
 import { 
     index,
     create,
-    authenticate
+    login
 }  from '../../controllers/UserController'
 
 const store = new UserStore();
@@ -17,7 +17,7 @@ userRouter.get('/', verifyAuthToken, index)
 
 userRouter.post('/', verifyAuthToken, create)
 
-userRouter.post('/authenticate', authenticate)
+userRouter.post('/login', login)
 
 // userRouter.get('/:productID', getProduct)
 

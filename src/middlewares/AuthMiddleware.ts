@@ -6,14 +6,15 @@ const verifyAuthToken = (req: Request, res: Response, next) => {
     try {
         const { authorization: authorizationHeader } = req.headers
         if(!authorizationHeader) {
-            throw new Error('Not Authorized');
+            // throw new Error('Not Authorized');
         }
         const token = authorizationHeader.split(' ')[1]
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
 
         next() // No error proceed to next middleware
     } catch (err) {
-        next(err) // This will be caught by error handler
+        return res.status(401).send('Not Authorized')
+        // next(err) // This will be caught by error handler
     }
 }
 

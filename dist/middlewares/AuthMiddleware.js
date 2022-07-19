@@ -8,14 +8,15 @@ var verifyAuthToken = function (req, res, next) {
     try {
         var authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
-            throw new Error('Not Authorized');
+            // throw new Error('Not Authorized');
         }
         var token = authorizationHeader.split(' ')[1];
         var decoded = jsonwebtoken_1["default"].verify(token, process.env.TOKEN_SECRET);
         next(); // No error proceed to next middleware
     }
     catch (err) {
-        next(err); // This will be caught by error handler
+        return res.status(401).send('Not Authorized');
+        // next(err) // This will be caught by error handler
     }
 };
 exports["default"] = verifyAuthToken;

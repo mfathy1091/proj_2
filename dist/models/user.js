@@ -174,40 +174,6 @@ var UserStore = /** @class */ (function () {
             });
         });
     };
-    UserStore.prototype.authenticate = function (email, password) {
-        return __awaiter(this, void 0, void 0, function () {
-            var connection, sql, result, hashPassword, isPasswordValid, result_1, user, err_6;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 5, , 6]);
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        connection = _a.sent();
-                        sql = 'SELECT password_digest FROM users WHERE email=($1)';
-                        return [4 /*yield*/, connection.query(sql, [email])];
-                    case 2:
-                        result = _a.sent();
-                        if (!result.rows.length) return [3 /*break*/, 4];
-                        hashPassword = result.rows[0].password_digest;
-                        isPasswordValid = bcrypt_1["default"].compareSync(password + pepper, hashPassword);
-                        if (!isPasswordValid) return [3 /*break*/, 4];
-                        return [4 /*yield*/, connection.query('SELECT id, email, first_name, last_name FROM users WHERE email=($1)', [email])];
-                    case 3:
-                        result_1 = _a.sent();
-                        user = result_1.rows[0];
-                        return [2 /*return*/, user];
-                    case 4:
-                        connection.release();
-                        return [2 /*return*/, null];
-                    case 5:
-                        err_6 = _a.sent();
-                        throw new Error("Unable to login: ".concat(err_6.message));
-                    case 6: return [2 /*return*/];
-                }
-            });
-        });
-    };
     return UserStore;
 }());
 exports.UserStore = UserStore;

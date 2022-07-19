@@ -39,78 +39,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.destroy = exports.create = exports.show = exports.index = void 0;
+exports.login = void 0;
 var user_1 = require("../models/user");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var store = new user_1.UserStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
-            case 1:
-                users = _a.sent();
-                res.json(users);
-                console.log('index');
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.index = index;
-var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.show(req.body.id)];
-            case 1:
-                user = _a.sent();
-                res.json(user);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.show = show;
-var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var authService = new user_1.UserStore();
+var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, user, token, err_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                user = {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    email: req.body.email,
-                    password: req.body.password
-                };
-                _a.label = 1;
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, login(email, password)];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, store.create(user)];
-            case 2:
-                newUser = _a.sent();
-                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
+                user = _b.sent();
+                token = jsonwebtoken_1["default"].sign({ user: user }, process.env.TOKEN_SECRET);
                 res.json(token);
-                return [3 /*break*/, 4];
-            case 3:
-                err_1 = _a.sent();
-                console.log(err_1);
-                res.status(500);
-                res.json(err_1 + user);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                err_1 = _b.sent();
+                res.status(401);
+                res.json({ err: err_1 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.create = create;
-var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store["delete"](req.body.id)];
-            case 1:
-                deleted = _a.sent();
-                res.json(deleted);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.destroy = destroy;
+exports.login = login;

@@ -28,8 +28,10 @@ const create = async (req: Request, res: Response) => {
         let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET)
         res.json(token)
     } catch(err) {
+        console.log(err)
         res.status(500)
         res.json(err + user)
+        
     }
 }
 
@@ -38,18 +40,7 @@ const destroy = async (req: Request, res: Response) => {
     res.json(deleted)
 }
 
-const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { email, password } = req.body;
-        const user = await store.authenticate(email, password)
-        const token = jwt.sign({user}, process.env.TOKEN_SECRET as unknown as string);
-        res.json(user)
-    } catch (err) {
-        res.status(401)
-        res.json({ err })
-    }
 
-}
 
 // const articleRoutes = (app: express.Application) => {
 //     app.get('/users', index)
@@ -66,5 +57,4 @@ export {
     show,
     create,
     destroy,
-    authenticate
 }

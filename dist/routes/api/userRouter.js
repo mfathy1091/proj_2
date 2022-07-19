@@ -11,7 +11,7 @@ var store = new user_1.UserStore();
 var userRouter = express_1["default"].Router();
 userRouter.get('/', AuthMiddleware_1["default"], UserController_1.index);
 userRouter.post('/', AuthMiddleware_1["default"], UserController_1.create);
-userRouter.post('/authenticate', UserController_1.authenticate);
+userRouter.post('/login', UserController_1.login);
 // userRouter.get('/:productID', getProduct)
 // userRouter.post('/', createProduct) 
 // userRouter.put('/:productID', updateProduct) 
