@@ -1,12 +1,13 @@
 //@ts-ignore
 import pool from '../config/database';
-import bcrypt from 'bcrypt'
-import { Connection } from 'pg';
-import { User } from '../types/user'
 
-let saltRounds = process.env.SALT_ROUND
-let pepper = process.env.BCRYPT_PASSWORD
-
+export type User = {
+    id?: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    password_digest: string
+}
 
 export class UserStore {
 
@@ -38,18 +39,12 @@ export class UserStore {
         }
     }
 
-    async create(user: Omit<User, "id">): Promise<User> {
+    async create(user: User): Promise<User> {
         try {
             // @ts-ignore
             const conn = await pool.connect()
             const sql = 'INSERT INTO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
-
-            const hash = bcrypt.hashSync(
-                user.password + pepper,
-                parseInt(saltRounds as string)
-            );
-
-            const result = await conn.query(sql, [user.first_name, user.last_name,  user.email, hash])
+            const result = await conn.query(sql, [user.first_name, user.last_name,  user.email, user.password_digest])
             const newUser = result.rows[0]
 
             conn.release()

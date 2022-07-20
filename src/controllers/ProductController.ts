@@ -21,12 +21,11 @@ const create = async (req: Request, res: Response) => {
     }
     try {
         const newProduct = await store.create(product)
-        console.log(newProduct)
         res.status(201)
         res.json(newProduct)
     } catch(err) {
         res.status(500)
-        res.json(err.message)
+        res.json(err)
     }
 }
 
@@ -40,7 +39,7 @@ const update = async (req: Request, res: Response) => {
         res.json(newProduct)
     } catch(err) {
         res.status(500)
-        res.json(err.message)    
+        res.json(err)    
     }
 }
 

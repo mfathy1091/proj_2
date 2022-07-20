@@ -82,8 +82,8 @@ export class OrderStore {
     async addProduct(orderId: string, productId: string, quantity: string) {
         try {
             const order = await this.show(orderId)
-            if(order.status !== 'open'){
-                throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order.status}`)
+            if(order?.status !== 'open'){
+                throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order?.status}`)
             }else{
                 const sql = "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
                 //@ts-ignore

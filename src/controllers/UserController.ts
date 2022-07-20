@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { UserStore } from '../models/user'
-import { User } from '../types/user'
-
+import { User, UserStore } from '../models/user'
+import { hashPassword } from '../utils/hashing'
+//@ts-ignore
 import jwt from 'jsonwebtoken'
 
 
@@ -13,25 +13,27 @@ const index = async (_req: Request, res: Response) => {
 }
 
 const show = async (req: Request, res: Response) => {
-    const user = await store.show(req.body.id)
+    const user = await store.show(req.params.userId)
     res.json(user)
 }
 
 const create = async (req: Request, res: Response) => {
+    const hashedPassword = await hashPassword(req.body.password)
     const user: User = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
-        password: req.body.password
+        password_digest: hashedPassword
     }
     try {
         const newUser = await store.create(user)
         let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as unknown as string)
+        res.status(201)
         res.json(token)
     } catch(err) {
         console.log(err)
         res.status(500)
-        res.json(err.message + user)
+        res.json(err)
     }
 }
 

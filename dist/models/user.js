@@ -42,9 +42,6 @@ exports.__esModule = true;
 exports.UserStore = void 0;
 //@ts-ignore
 var database_1 = __importDefault(require("../config/database"));
-var bcrypt_1 = __importDefault(require("bcrypt"));
-var saltRounds = process.env.SALT_ROUND;
-var pepper = process.env.BCRYPT_PASSWORD;
 var UserStore = /** @class */ (function () {
     function UserStore() {
     }
@@ -100,7 +97,7 @@ var UserStore = /** @class */ (function () {
     };
     UserStore.prototype.create = function (user) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, hash, result, newUser, err_3;
+            var conn, sql, result, newUser, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -109,8 +106,7 @@ var UserStore = /** @class */ (function () {
                     case 1:
                         conn = _a.sent();
                         sql = 'INSERT INTO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *';
-                        hash = bcrypt_1["default"].hashSync(user.password + pepper, parseInt(saltRounds));
-                        return [4 /*yield*/, conn.query(sql, [user.first_name, user.last_name, user.email, hash])];
+                        return [4 /*yield*/, conn.query(sql, [user.first_name, user.last_name, user.email, user.password_digest])];
                     case 2:
                         result = _a.sent();
                         newUser = result.rows[0];

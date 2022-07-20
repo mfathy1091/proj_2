@@ -1,3 +1,4 @@
+//@ts-ignore
 import pool from '../config/database'
 import { Order, OrderStore } from '../models/order'
 const store = new OrderStore()

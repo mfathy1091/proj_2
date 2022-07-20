@@ -39,31 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.login = void 0;
-//@ts-ignore
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var auth_1 = require("../services/auth");
-var auth = new auth_1.authQueries();
-var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, user, token, err_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, auth.login(email, password)];
-            case 1:
-                user = _b.sent();
-                token = jsonwebtoken_1["default"].sign({ user: user }, process.env.TOKEN_SECRET);
-                res.json(token);
-                return [3 /*break*/, 3];
-            case 2:
-                err_1 = _b.sent();
-                res.status(401);
-                res.json(err_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+exports.hashPassword = void 0;
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var hashPassword = function (password) { return __awaiter(void 0, void 0, void 0, function () {
+    var saltRounds, pepper, hashedPassword;
+    return __generator(this, function (_a) {
+        saltRounds = process.env.SALT_ROUND;
+        pepper = process.env.BCRYPT_PASSWORD;
+        hashedPassword = bcrypt_1["default"].hashSync(password + pepper, parseInt(saltRounds));
+        return [2 /*return*/, hashedPassword];
     });
 }); };
-exports.login = login;
+exports.hashPassword = hashPassword;

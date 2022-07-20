@@ -80,14 +80,13 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.create(product)];
             case 2:
                 newProduct = _a.sent();
-                console.log(newProduct);
                 res.status(201);
                 res.json(newProduct);
                 return [3 /*break*/, 4];
             case 3:
                 err_1 = _a.sent();
                 res.status(500);
-                res.json(err_1.message);
+                res.json(err_1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -114,7 +113,7 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             case 3:
                 err_2 = _a.sent();
                 res.status(500);
-                res.json(err_2.message);
+                res.json(err_2);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

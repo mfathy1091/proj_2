@@ -1,4 +1,5 @@
 import express from 'express';
+import verifyAuthToken from '../middlewares/AuthMiddleware'
 
 import { 
     index,
@@ -14,7 +15,7 @@ productRouter.get('/', index)
 
 productRouter.get('/:productID', show)
 
-productRouter.post('/', create) 
+productRouter.post('/', verifyAuthToken, create) 
 
 productRouter.put('/:productID', update) 
 

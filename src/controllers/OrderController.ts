@@ -24,7 +24,7 @@ const create = async (req: Request, res: Response) => {
         res.json(newOrder)
     } catch(err) {
         res.status(500)
-        res.json(err.message)    
+        res.json(err)    
     }
 }
 
@@ -38,7 +38,7 @@ const update = async (req: Request, res: Response) => {
         res.json(updatedOrder)
     } catch(err) {
         res.status(500)
-        res.json(err.message)    
+        res.json(err)    
     }
 }
 
@@ -59,7 +59,7 @@ const addProduct = async (req: Request, res: Response) => {
         res.status(201)
     } catch(err) {
         res.status(500)
-        res.json(err.message)    
+        res.json(err)    
     }
 }
 

@@ -180,8 +180,8 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, this.show(orderId)];
                     case 1:
                         order = _a.sent();
-                        if (!(order.status !== 'open')) return [3 /*break*/, 2];
-                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " because order status is ").concat(order.status));
+                        if (!((order === null || order === void 0 ? void 0 : order.status) !== 'open')) return [3 /*break*/, 2];
+                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " because order status is ").concat(order === null || order === void 0 ? void 0 : order.status));
                     case 2:
                         sql = "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
                         return [4 /*yield*/, database_1["default"].connect()];

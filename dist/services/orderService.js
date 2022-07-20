@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.orderService = void 0;
+//@ts-ignore
 var database_1 = __importDefault(require("../config/database"));
 var order_1 = require("../models/order");
 var store = new order_1.OrderStore();

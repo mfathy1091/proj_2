@@ -8,5 +8,6 @@ var AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"))
 var UserController_1 = require("../controllers/UserController");
 var userRouter = express_1["default"].Router();
 userRouter.get('/', AuthMiddleware_1["default"], UserController_1.index);
+userRouter.get('/:userId', AuthMiddleware_1["default"], UserController_1.show);
 userRouter.post('/', AuthMiddleware_1["default"], UserController_1.create);
 exports["default"] = userRouter;

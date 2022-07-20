@@ -39,31 +39,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.login = void 0;
+exports.authQueries = void 0;
 //@ts-ignore
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var auth_1 = require("../services/auth");
-var auth = new auth_1.authQueries();
-var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, user, token, err_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, auth.login(email, password)];
-            case 1:
-                user = _b.sent();
-                token = jsonwebtoken_1["default"].sign({ user: user }, process.env.TOKEN_SECRET);
-                res.json(token);
-                return [3 /*break*/, 3];
-            case 2:
-                err_1 = _b.sent();
-                res.status(401);
-                res.json(err_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.login = login;
+var database_1 = __importDefault(require("../config/database"));
+var bcrypt_1 = __importDefault(require("bcrypt"));
+// let saltRounds = process.env.SALT_ROUND
+var pepper = process.env.BCRYPT_PASSWORD;
+var authQueries = /** @class */ (function () {
+    function authQueries() {
+    }
+    authQueries.prototype.login = function (email, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var connection, sql, result, hashPassword, isPasswordValid, result_1, user, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, database_1["default"].connect()];
+                    case 1:
+                        connection = _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 9, 10, 11]);
+                        sql = 'SELECT password_digest FROM users WHERE email=($1)';
+                        return [4 /*yield*/, connection.query(sql, [email])];
+                    case 3:
+                        result = _a.sent();
+                        if (!result.rows.length) return [3 /*break*/, 7];
+                        hashPassword = result.rows[0].password_digest;
+                        isPasswordValid = bcrypt_1["default"].compareSync(password + pepper, hashPassword);
+                        if (!isPasswordValid) return [3 /*break*/, 5];
+                        return [4 /*yield*/, connection.query('SELECT id, email, first_name, last_name FROM users WHERE email=($1)', [email])];
+                    case 4:
+                        result_1 = _a.sent();
+                        user = result_1.rows[0];
+                        return [2 /*return*/, user];
+                    case 5: throw new Error("Invalid password");
+                    case 6: return [3 /*break*/, 8];
+                    case 7: throw new Error("Invalid credentials");
+                    case 8: return [3 /*break*/, 11];
+                    case 9:
+                        err_1 = _a.sent();
+                        throw new Error("Unable to login: ".concat(err_1.message));
+                    case 10:
+                        connection.release();
+                        return [7 /*endfinally*/];
+                    case 11: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return authQueries;
+}());
+exports.authQueries = authQueries;

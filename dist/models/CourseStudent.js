@@ -39,10 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CourseTable = void 0;
+exports.CourseStudentTable = void 0;
 //@ts-ignore
 var database_1 = __importDefault(require("../config/database"));
-function index() {
+var Course_1 = require("./Course");
+function getOne(courseId) {
     return __awaiter(this, void 0, void 0, function () {
         var connection, result;
         return __generator(this, function (_a) {
@@ -50,70 +51,95 @@ function index() {
                 case 0: return [4 /*yield*/, database_1.default.connect()];
                 case 1:
                     connection = _a.sent();
-                    return [4 /*yield*/, connection.query("SELECT * FROM course")];
+                    _a.label = 2;
                 case 2:
+                    _a.trys.push([2, , 4, 5]);
+                    return [4 /*yield*/, connection.query("\n        SELECT course.id, course.name,\n        instructor.name as \"instructorName\",\n        instructor.id as \"instructorId\",\n        course_student.grade,\n        student.name as \"studentName\",\n        student.id as \"studentId\"\n        FROM course INNER JOIN instructor ON course.instructor_id = instructor.id\n        INNER JOIN course_student ON course.id = course_student.course_id\n        INNER JOIN student ON student.id = course_student.student_id\n        WHERE course.id = $1;\n    ", [courseId])];
+                case 3:
                     result = _a.sent();
-                    connection.release();
-                    return [2 /*return*/, result.rows];
-            }
-        });
-    });
-}
-function add(course) {
-    return __awaiter(this, void 0, void 0, function () {
-        var connection, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database_1.default.connect()];
-                case 1:
-                    connection = _a.sent();
-                    return [4 /*yield*/, connection.query("INSERT INTO course (name, instructor_id) VALUES ($1, $2) RETURNING *;", [course.name, course.instructor_id])];
-                case 2:
-                    result = _a.sent();
-                    connection.release();
-                    return [2 /*return*/, result.rows[0]];
-            }
-        });
-    });
-}
-function remove(id) {
-    return __awaiter(this, void 0, void 0, function () {
-        var connection;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database_1.default.connect()];
-                case 1:
-                    connection = _a.sent();
-                    return [4 /*yield*/, connection.query("DELETE FROM course WHERE id = $1", [id])];
-                case 2:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-function get(id) {
-    return __awaiter(this, void 0, void 0, function () {
-        var connection, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database_1.default.connect()];
-                case 1:
-                    connection = _a.sent();
-                    return [4 /*yield*/, connection.query("SELECT * FROM course WHERE id = $1", [id])];
-                case 2:
-                    result = _a.sent();
-                    connection.release();
                     if (result.rowCount === 0)
-                        throw new Error("BaseCourse not found");
-                    return [2 /*return*/, result.rows[0]];
+                        throw new Error("Course ".concat(courseId, " not found"));
+                    return [2 /*return*/, {
+                            id: result.rows[0].id,
+                            name: result.rows[0].name,
+                            instructor: {
+                                id: result.rows[0].instructorId,
+                                name: result.rows[0].instructorName,
+                            },
+                            //@ts-ignore
+                            students: result.rows.map(function (row) { return ({
+                                id: row.studentId,
+                                name: row.studentName,
+                                grade: row.grade,
+                            }); }),
+                        }];
+                case 4:
+                    connection.release();
+                    return [7 /*endfinally*/];
+                case 5: return [2 /*return*/];
             }
         });
     });
 }
-exports.CourseTable = {
-    index: index,
-    add: add,
-    remove: remove,
-    get: get,
+function enroll(courseId, studentId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var connection, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database_1.default.connect()];
+                case 1:
+                    connection = _a.sent();
+                    _a.label = 2;
+                case 2:
+                    _a.trys.push([2, 4, 5, 6]);
+                    return [4 /*yield*/, connection.query("INSERT INTO course_student (student_id, course_id) VALUES($1, $2);", [studentId, courseId])];
+                case 3:
+                    _a.sent();
+                    return [3 /*break*/, 6];
+                case 4:
+                    e_1 = _a.sent();
+                    console.error(e_1);
+                    throw new Error("Failed to enroll to course");
+                case 5:
+                    connection.release();
+                    return [7 /*endfinally*/];
+                case 6: return [2 /*return*/];
+            }
+        });
+    });
+}
+function setGrade(courseId, studentId, grade) {
+    return __awaiter(this, void 0, void 0, function () {
+        var connection, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database_1.default.connect()];
+                case 1:
+                    connection = _a.sent();
+                    _a.label = 2;
+                case 2:
+                    _a.trys.push([2, 4, 5, 6]);
+                    return [4 /*yield*/, connection.query("UPDATE course_student SET grade = $1 WHERE course_id = $2 AND student_id = $3;", [grade, courseId, studentId])];
+                case 3:
+                    _a.sent();
+                    return [3 /*break*/, 6];
+                case 4:
+                    e_2 = _a.sent();
+                    console.error(e_2);
+                    throw new Error("Failed to set grade");
+                case 5:
+                    connection.release();
+                    return [7 /*endfinally*/];
+                case 6: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.CourseStudentTable = {
+    getOne: getOne,
+    enroll: enroll,
+    setGrade: setGrade,
+    add: Course_1.CourseTable.add,
+    remove: Course_1.CourseTable.remove,
+    // update: courseModel.update,
 };

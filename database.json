@@ -1,16 +1,16 @@
 {
-    "dev": {
-      "driver": "pg",
-      "host": "127.0.0.1",
-      "database": "pstic_postgres_db",
-      "user": "postgres",
-      "password": "postgres"
-    },
-    "test": {
-      "driver": "pg",
-      "host": "127.0.0.1",
-      "database": "fantasy_worlds_test",
-      "user": "test_user",
-      "password": "postgres"
-    }
+  "dev": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "store_front",
+    "user": "postgres",
+    "password": "postgres"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "store_front_test",
+    "user": "postgres",
+    "password": "postgres"
   }
+}

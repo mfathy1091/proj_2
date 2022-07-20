@@ -35,21 +35,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
-exports.destroy = exports.create = exports.show = exports.index = void 0;
-var user_1 = require("../models/user");
-var hashing_1 = require("../utils/hashing");
-//@ts-ignore
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var store = new user_1.UserStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+exports.fiveMostExpensive = exports.usersWithOrders = exports.productsInOrders = void 0;
+var dashboard_1 = require("../services/dashboard");
+var dashboard = new dashboard_1.DashboardQueries();
+var productsInOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var products;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, dashboard.productsInOrders()];
+            case 1:
+                products = _a.sent();
+                res.json(products);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.productsInOrders = productsInOrders;
+var usersWithOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
+            case 0: return [4 /*yield*/, dashboard.usersWithOrders()];
             case 1:
                 users = _a.sent();
                 res.json(users);
@@ -57,64 +64,17 @@ var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
-exports.index = index;
-var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+exports.usersWithOrders = usersWithOrders;
+var fiveMostExpensive = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.show(req.params.userId)];
+            case 0: return [4 /*yield*/, dashboard.fiveMostExpensive()];
             case 1:
-                user = _a.sent();
-                res.json(user);
+                users = _a.sent();
+                res.json(users);
                 return [2 /*return*/];
         }
     });
 }); };
-exports.show = show;
-var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var hashedPassword, user, newUser, token, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, hashing_1.hashPassword)(req.body.password)];
-            case 1:
-                hashedPassword = _a.sent();
-                user = {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    email: req.body.email,
-                    password_digest: hashedPassword
-                };
-                _a.label = 2;
-            case 2:
-                _a.trys.push([2, 4, , 5]);
-                return [4 /*yield*/, store.create(user)];
-            case 3:
-                newUser = _a.sent();
-                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
-                res.status(201);
-                res.json(token);
-                return [3 /*break*/, 5];
-            case 4:
-                err_1 = _a.sent();
-                console.log(err_1);
-                res.status(500);
-                res.json(err_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); };
-exports.create = create;
-var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store["delete"](req.body.id)];
-            case 1:
-                deleted = _a.sent();
-                res.json(deleted);
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.destroy = destroy;
+exports.fiveMostExpensive = fiveMostExpensive;
