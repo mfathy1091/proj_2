@@ -1,12 +1,9 @@
 //@ts-ignore
 import pool from '../config/database';
 import { orderService } from '../services/orderService';
+import Order from '../types/order'
 
-export type Order = {
-    id?: number,
-    status: string,
-    user_id: string,
-}
+
 
 export class OrderStore {
     

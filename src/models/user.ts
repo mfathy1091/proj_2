@@ -1,15 +1,8 @@
 //@ts-ignore
 import pool from '../config/database';
+import User from '../types/user'
 
-export type User = {
-    id?: string,
-    first_name: string,
-    last_name: string,
-    email: string,
-    password_digest: string
-}
-
-export class UserStore {
+export default class UserStore {
 
     async index(): Promise<User[]> {
         //@ts-ignore

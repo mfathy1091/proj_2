@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hashPassword = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
-    let saltRounds = process.env.SALT_ROUND;
-    let pepper = process.env.BCRYPT_PASSWORD;
-    const hashedPassword = bcrypt_1.default.hashSync(password + pepper, parseInt(saltRounds));
-    return hashedPassword;
+const supertest_1 = __importDefault(require("supertest"));
+const server_1 = __importDefault(require("../server"));
+// create a request object
+const request = (0, supertest_1.default)(server_1.default);
+describe('Test the root server endpoint', () => {
+    it('get the / endpoint', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.get('/');
+        expect(res.status).toBe(200);
+    }));
 });
-exports.hashPassword = hashPassword;

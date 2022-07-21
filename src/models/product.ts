@@ -1,11 +1,6 @@
 //@ts-ignore
 import pool from '../config/database';
-
-export type Product = {
-    id?: number,
-    name: string,
-    price: number,
-}
+import Product from '../types/product'
 
 export class ProductStore {
     

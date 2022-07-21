@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { User, UserStore } from '../models/user'
+import UserStore from '../models/user'
 import { hashPassword } from '../utils/hashing'
+import User from '../types/user'
 //@ts-ignore
 import jwt from 'jsonwebtoken'
 

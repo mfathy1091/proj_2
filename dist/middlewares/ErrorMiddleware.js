@@ -1,8 +1,8 @@
 "use strict";
-exports.__esModule = true;
-var ErrorMiddleware = function (error, _req, res, next) {
-    var status = error.status || 500;
-    var message = error.message || 'Error';
-    res.status(status).json({ status: status, message: message });
+Object.defineProperty(exports, "__esModule", { value: true });
+const ErrorMiddleware = (error, _req, res, next) => {
+    const status = error.status || 500;
+    const message = error.message || 'Error';
+    res.status(status).json({ status, message });
 };
-exports["default"] = ErrorMiddleware;
+exports.default = ErrorMiddleware;

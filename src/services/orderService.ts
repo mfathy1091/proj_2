@@ -1,6 +1,7 @@
 //@ts-ignore
 import pool from '../config/database'
-import { Order, OrderStore } from '../models/order'
+import { OrderStore } from '../models/order'
+import Order from '../types/order'
 const store = new OrderStore()
 
 

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
-import { Product, ProductStore } from '../models/product'
+import { ProductStore } from '../models/product'
 
+import Product from '../types/product'
 
 const store = new ProductStore()
 

@@ -2,7 +2,7 @@
 //@ts-ignore
 import pool from '../config/database';
 import bcrypt from 'bcrypt'
-import { User } from '../types/user'
+import User  from '../types/user'
 
 // let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD

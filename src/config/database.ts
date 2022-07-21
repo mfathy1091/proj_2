@@ -8,23 +8,23 @@ const {
     POSTGRES_DB,
     POSTGRES_USER,
     POSTGRES_PASSWORD,
-    POSTGRES_TEST_DB,
-    ENV,
+    POSTGRES_DB_TEST,
+    NODE_ENV,
 } = process.env
 
 let pool
-console.log(ENV)
+console.log('NODE_ENV:' + NODE_ENV)
 
-if (ENV === 'test') {
+if (NODE_ENV === 'test') {
     pool = new Pool({
         host: POSTGRES_HOST,
-        database: POSTGRES_TEST_DB,
+        database: POSTGRES_DB_TEST,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
     })
 }
 
-if (ENV === 'dev') {
+if (NODE_ENV === 'dev') {
     pool = new Pool({
         host: POSTGRES_HOST,
         database: POSTGRES_DB,

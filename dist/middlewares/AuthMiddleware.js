@@ -2,17 +2,17 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var verifyAuthToken = function (req, res, next) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const verifyAuthToken = (req, res, next) => {
     try {
-        var authorizationHeader = req.headers.authorization;
+        const { authorization: authorizationHeader } = req.headers;
         if (!authorizationHeader) {
             // throw new Error('Not Authorized');
         }
         //@ts-ignore
-        var token = authorizationHeader.split(' ')[1];
-        var decoded = jsonwebtoken_1["default"].verify(token, process.env.TOKEN_SECRET);
+        const token = authorizationHeader.split(' ')[1];
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
         next(); // No error proceed to next middleware
     }
     catch (err) {
@@ -20,4 +20,4 @@ var verifyAuthToken = function (req, res, next) {
         // next(err) // This will be caught by error handler
     }
 };
-exports["default"] = verifyAuthToken;
+exports.default = verifyAuthToken;
