@@ -34,7 +34,7 @@ const create = async (req: Request, res: Response) => {
     } catch(err) {
         console.log(err)
         res.status(500)
-        res.json(err)
+        res.json((err as Error).message)
     }
 }
 

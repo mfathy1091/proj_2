@@ -1,5 +1,4 @@
 
-//@ts-ignore
 import pool from '../config/database';
 import bcrypt from 'bcrypt'
 import User  from '../types/user'
@@ -7,17 +6,14 @@ import User  from '../types/user'
 // let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD
 
-export class authQueries {
+export default class authQueries {
     async login(email: string, password: string): Promise<User | null> {
-        //@ts-ignore
         const connection = await pool.connect()
         try {
-            const sql = 'SELECT password_digest FROM users WHERE email=($1)'
-            const result = await connection.query(sql, [email])
-    
-            if(result.rows.length) {
-                const { password_digest: hashPassword } = result.rows[0];
-                const isPasswordValid = bcrypt.compareSync( password+pepper, hashPassword )
+
+            const userStoredPassword = await this.getUserStoredPassword(email);
+            if(userStoredPassword !== null) {
+                const isPasswordValid = bcrypt.compareSync( password+pepper, hashedPassword )
     
                 if (isPasswordValid) {
                     const result = await connection.query(
@@ -38,8 +34,46 @@ export class authQueries {
         }finally{
             connection.release();
         }
-    
-    
     }
+
+    async getStoredCredentials(email: string): Promise<boolean> {
+        try {
+            const connection = await pool.connect();
+            const sql = 'SELECT id, email, first_name, last_name FROM users WHERE email=($1)'
+            const result = await connection.query(sql, [email])
+            const user = result.rows[0];
+
+            if(user !== null){  // email/user exists
+                const { password_digest: storedPassword, ...payload: userPayload } = user;
+                return storedPassword
+            }else{
+                return null
+            }
+        } catch (err) {
+            throw new Error(`Unable to get stored password: ${(err as Error).message}`);
+        }
+    }
+
+    async checkEmailExists(email: string): Promise<boolean> {
+
+        return true
+    }
+
+    async getUserStoredPassword(email: string): Promise<string | null> {
+        try {
+            const connection = await pool.connect();
+            const sql = 'SELECT password_digest FROM users WHERE email=($1)'
+            const result = await connection.query(sql, [email])
+            if(result.rows[0].length){
+                const { password_digest: storedPassword } = result.rows[0];
+                return storedPassword
+            }else{
+                return null
+            }
+        } catch (err) {
+            throw new Error(`Unable to get stored password: ${(err as Error).message}`);
+        }
+    }
+
 }
 

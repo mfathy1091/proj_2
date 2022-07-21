@@ -50,7 +50,6 @@ class UserStore {
     create(user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // @ts-ignore
                 const conn = yield database_1.default.connect();
                 const sql = 'INSERT INTO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *';
                 const result = yield conn.query(sql, [user.first_name, user.last_name, user.email, user.password_digest]);

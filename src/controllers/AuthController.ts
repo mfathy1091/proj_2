@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
 //@ts-ignore
 import jwt from 'jsonwebtoken'
-import { authQueries } from '../services/auth'
+import authQueries from '../services/auth'
 
 const auth = new authQueries()
 

@@ -7,22 +7,31 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const pg_1 = require("pg");
 dotenv_1.default.config();
 const { POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB_TEST, NODE_ENV, } = process.env;
-let pool;
-console.log('NODE_ENV:' + NODE_ENV);
+console.log('NODE_ENV: ' + NODE_ENV);
+let envVariables = {
+    host: POSTGRES_HOST,
+    database: POSTGRES_DB_TEST,
+    user: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+};
 if (NODE_ENV === 'test') {
-    pool = new pg_1.Pool({
+    envVariables = {
         host: POSTGRES_HOST,
         database: POSTGRES_DB_TEST,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
-    });
+    };
 }
 if (NODE_ENV === 'dev') {
-    pool = new pg_1.Pool({
+    envVariables = {
         host: POSTGRES_HOST,
         database: POSTGRES_DB,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
-    });
+    };
 }
+const pool = new pg_1.Pool(envVariables);
+pool.on('error', (error) => {
+    console.error(error.message);
+});
 exports.default = pool;

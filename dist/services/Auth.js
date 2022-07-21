@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authQueries = void 0;
 //@ts-ignore
 const database_1 = __importDefault(require("../config/database"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -51,4 +50,4 @@ class authQueries {
         });
     }
 }
-exports.authQueries = authQueries;
+exports.default = authQueries;

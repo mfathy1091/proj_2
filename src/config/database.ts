@@ -12,25 +12,37 @@ const {
     NODE_ENV,
 } = process.env
 
-let pool
-console.log('NODE_ENV:' + NODE_ENV)
+console.log('NODE_ENV: ' + NODE_ENV)
+
+let envVariables = {
+    host: POSTGRES_HOST,
+    database: POSTGRES_DB_TEST,
+    user: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+}
 
 if (NODE_ENV === 'test') {
-    pool = new Pool({
+    envVariables = {
         host: POSTGRES_HOST,
         database: POSTGRES_DB_TEST,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
-    })
+    }
 }
 
 if (NODE_ENV === 'dev') {
-    pool = new Pool({
+    envVariables = {
         host: POSTGRES_HOST,
         database: POSTGRES_DB,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
-    })
+    }
 }
+
+const pool = new Pool(envVariables);
+
+pool.on('error', (error: Error) => {
+    console.error(error.message)
+})
 
 export default pool

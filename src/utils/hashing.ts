@@ -14,5 +14,6 @@ const hashPassword = async (password: string): Promise<string> => {
     return hashedPassword;
 }
 
+const verifyPassword = asycn(password: string)
 
 export { hashPassword }

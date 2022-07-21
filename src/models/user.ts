@@ -34,7 +34,7 @@ export default class UserStore {
 
     async create(user: User): Promise<User> {
         try {
-            // @ts-ignore
+            
             const conn = await pool.connect()
             const sql = 'INSERT INTO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
             const result = await conn.query(sql, [user.first_name, user.last_name,  user.email, user.password_digest])
@@ -45,7 +45,7 @@ export default class UserStore {
             return newUser
         } catch (err) {
             console.log(err)
-            throw new Error(`unable create user (${user.email}): ${err}`)
+            throw new Error(`unable create user (${user.email}): ${err} `)
         }
     }
 

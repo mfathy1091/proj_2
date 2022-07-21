@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
 //@ts-ignore
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const auth_1 = require("../services/auth");
-const auth = new auth_1.authQueries();
+const auth_1 = __importDefault(require("../services/auth"));
+const auth = new auth_1.default();
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
