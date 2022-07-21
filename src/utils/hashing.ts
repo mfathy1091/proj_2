@@ -2,18 +2,17 @@
 import bcrypt from 'bcrypt'
 
 
-const hashPassword = async (password: string): Promise<string> => {
+const encryptPassword = async (password: string): Promise<string> => {
     let saltRounds = process.env.SALT_ROUND
     let pepper = process.env.BCRYPT_PASSWORD
     
-    const hashedPassword = bcrypt.hashSync(
+    const encryptedPassword = bcrypt.hashSync(
         password + pepper,
         parseInt(saltRounds as string)
     );
 
-    return hashedPassword;
+    return encryptedPassword;
 }
 
-const verifyPassword = asycn(password: string)
 
-export { hashPassword }
+export { encryptPassword }

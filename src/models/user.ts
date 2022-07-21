@@ -21,12 +21,11 @@ export default class UserStore {
 
     async show(id: string): Promise<User> {
         try {
-            //@ts-ignore
             const connection = await pool.connect();
             const sql = 'SELECT * FROM users WHERE id=($1)';
             const result = await connection.query(sql, [id]);
-            return result.rows[0];
             connection.release();
+            return result.rows[0];
         } catch (err) {
             throw new Error(`Could not get users. Error: ${err}`)
         }
@@ -66,7 +65,6 @@ export default class UserStore {
 
     async delete(id: string): Promise<void> {
         try {
-            //@ts-ignore
             const connection = await pool.connect();
             const sql = "DELETE FROM users WHERE id=$1";
             const result = await connection.query(sql, [id]);

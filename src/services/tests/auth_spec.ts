@@ -2,6 +2,7 @@ import authQueries from '../auth'
 import UserStore from '../../models/user'
 import pool from '../../config/database'
 import User from '../../types/user'
+import { encryptPassword } from '../../utils/hashing'
 
 const store = new UserStore()
 const authService = new authQueries();
@@ -18,7 +19,7 @@ describe('Authentication Module', () => {
             first_name: 'John',
             last_name: 'Doe',
             email: 'john@gmail.com',
-            password_digest: await hashPassword('password123')
+            password_digest: await encryptPassword('password123')
         };
 
         beforeAll(async () => {
@@ -32,9 +33,8 @@ describe('Authentication Module', () => {
         })
 
         it('login method returns the auth user', async() => {
-            expect(authService.login).toBeDefined();
-            const result = await authService.login(user.email, user.password_digest)
-            expect(result).toEqual(user)
+            const result = await authService.login(user.email, 'password123')
+            expect(result as Omit<User, 'password_digest'>).toEqual(user)
         });
     })
 })

@@ -35,12 +35,11 @@ class UserStore {
     show(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = 'SELECT * FROM users WHERE id=($1)';
                 const result = yield connection.query(sql, [id]);
-                return result.rows[0];
                 connection.release();
+                return result.rows[0];
             }
             catch (err) {
                 throw new Error(`Could not get users. Error: ${err}`);
@@ -59,7 +58,7 @@ class UserStore {
             }
             catch (err) {
                 console.log(err);
-                throw new Error(`unable create user (${user.email}): ${err}`);
+                throw new Error(`unable create user (${user.email}): ${err} `);
             }
         });
     }
@@ -82,7 +81,6 @@ class UserStore {
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "DELETE FROM users WHERE id=$1";
                 const result = yield connection.query(sql, [id]);

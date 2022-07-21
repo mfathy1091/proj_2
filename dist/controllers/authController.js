@@ -26,7 +26,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (err) {
         res.status(401);
-        res.json(err);
+        res.json(err.message);
     }
 });
 exports.login = login;

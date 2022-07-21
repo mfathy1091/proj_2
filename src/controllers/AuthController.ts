@@ -13,7 +13,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         res.json(token)
     } catch (err) {
         res.status(401)
-        res.json(err)    
+        res.json((err as Error).message)    
     }
 }
 

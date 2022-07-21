@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express'
 import UserStore from '../models/user'
-import { hashPassword } from '../utils/hashing'
+import { encryptPassword } from '../utils/hashing'
 import User from '../types/user'
 //@ts-ignore
 import jwt from 'jsonwebtoken'
@@ -19,12 +19,12 @@ const show = async (req: Request, res: Response) => {
 }
 
 const create = async (req: Request, res: Response) => {
-    const hashedPassword = await hashPassword(req.body.password)
+    const encryptedPassword = await encryptPassword(req.body.password)
     const user: User = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
-        password_digest: hashedPassword
+        password_digest: encryptedPassword
     }
     try {
         const newUser = await store.create(user)

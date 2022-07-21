@@ -29,12 +29,12 @@ const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.show = show;
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const hashedPassword = yield (0, hashing_1.hashPassword)(req.body.password);
+    const encryptedPassword = yield (0, hashing_1.encryptPassword)(req.body.password);
     const user = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
-        password_digest: hashedPassword
+        password_digest: encryptedPassword
     };
     try {
         const newUser = yield store.create(user);
@@ -45,7 +45,7 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (err) {
         console.log(err);
         res.status(500);
-        res.json(err);
+        res.json(err.message);
     }
 });
 exports.create = create;

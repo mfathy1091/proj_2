@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//@ts-ignore
 const database_1 = __importDefault(require("../config/database"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 // let saltRounds = process.env.SALT_ROUND
@@ -20,17 +19,17 @@ let pepper = process.env.BCRYPT_PASSWORD;
 class authQueries {
     login(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            //@ts-ignore
             const connection = yield database_1.default.connect();
             try {
-                const sql = 'SELECT password_digest FROM users WHERE email=($1)';
+                const sql = 'SELECT id, email, first_name, last_name, password_digest FROM users WHERE email=($1)';
                 const result = yield connection.query(sql, [email]);
-                if (result.rows.length) {
-                    const { password_digest: hashPassword } = result.rows[0];
-                    const isPasswordValid = bcrypt_1.default.compareSync(password + pepper, hashPassword);
+                const user = result.rows[0];
+                // if user exists
+                if (user) {
+                    const { password_digest: encryptedPassworerd } = user;
+                    // compare passwords
+                    const isPasswordValid = bcrypt_1.default.compareSync(password + pepper, encryptedPassworerd);
                     if (isPasswordValid) {
-                        const result = yield connection.query('SELECT id, email, first_name, last_name FROM users WHERE email=($1)', [email]);
-                        const user = result.rows[0];
                         return user;
                     }
                     else {
@@ -38,10 +37,11 @@ class authQueries {
                     }
                 }
                 else {
-                    throw new Error(`Invalid credentials`);
+                    throw new Error(`Invalid Email or Password`);
                 }
             }
             catch (err) {
+                console.log(err);
                 throw new Error(`Unable to login: ${err.message}`);
             }
             finally {

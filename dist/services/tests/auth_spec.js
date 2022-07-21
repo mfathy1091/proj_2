@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const auth_1 = __importDefault(require("../auth"));
 const user_1 = __importDefault(require("../../models/user"));
 const database_1 = __importDefault(require("../../config/database"));
+const hashing_1 = require("../../utils/hashing");
 const store = new user_1.default();
 const authService = new auth_1.default();
 describe('Authentication Module', () => {
@@ -28,7 +29,7 @@ describe('Authentication Module', () => {
             first_name: 'John',
             last_name: 'Doe',
             email: 'john@gmail.com',
-            password_digest: yield hashPassword('password123')
+            password_digest: yield (0, hashing_1.encryptPassword)('password123')
         };
         beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
             const newUser = yield store.create(user);
@@ -39,8 +40,7 @@ describe('Authentication Module', () => {
             yield connection.release();
         }));
         it('login method returns the auth user', () => __awaiter(void 0, void 0, void 0, function* () {
-            expect(authService.login).toBeDefined();
-            const result = yield authService.login(user.email, user.password_digest);
+            const result = yield authService.login(user.email, 'password123');
             expect(result).toEqual(user);
         }));
     }));
