@@ -11,7 +11,6 @@ describe('Authentication Module', () => {
     it('login method exists', () => {
         expect(authService.login).toBeDefined();
     });
-    
 
     let user: User
 
@@ -19,7 +18,7 @@ describe('Authentication Module', () => {
         const connection = await pool.connect();
         await connection.query('DELETE FROM users');
         await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
-        // await connection.release();
+        await connection.release();
         
         user = {
             id: 1,
@@ -39,7 +38,8 @@ describe('Authentication Module', () => {
     })
 
     it('login method returns the auth user', async() => {
-        const authUser = await authService.login(user.email, 'password12345545')            
+        
+        const authUser = await authService.login(user.email, 'password123')            
         expect(authUser).not.toBe(null)
         expect(authUser?.email).toEqual(user.email)
         const isPasswordValid = await hashingService.isPasswordValid('password123', user.password as string)

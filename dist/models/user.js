@@ -18,7 +18,7 @@ class UserStore {
         return __awaiter(this, void 0, void 0, function* () {
             const connection = yield database_1.default.connect();
             try {
-                const sql = `SELECT * FROM users`;
+                const sql = `SELECT id, first_name, last_name, email FROM users`;
                 const result = yield connection.query(sql);
                 return result.rows;
             }

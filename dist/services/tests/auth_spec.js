@@ -50,7 +50,7 @@ describe('Authentication Module', () => {
         const connection = yield database_1.default.connect();
         yield connection.query('DELETE FROM users');
         yield connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
-        // await connection.release();
+        yield connection.release();
         user = {
             id: 1,
             first_name: 'John',
@@ -67,7 +67,7 @@ describe('Authentication Module', () => {
         yield connection.release();
     }));
     it('login method returns the auth user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'password12345545');
+        const authUser = yield authService.login(user.email, 'password123');
         expect(authUser).not.toBe(null);
         expect(authUser === null || authUser === void 0 ? void 0 : authUser.email).toEqual(user.email);
         const isPasswordValid = yield hashingService.isPasswordValid('password123', user.password);

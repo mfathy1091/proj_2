@@ -11,6 +11,7 @@ const app = (0, express_1.default)();
 const address = "127.0.0.1:" + process.env.NODE_PORT;
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
+console.log('hi');
 app.get('/', function (req, res) {
     res.send('Hello World!');
 });

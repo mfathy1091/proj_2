@@ -6,7 +6,7 @@ export default class UserStore {
     async index(): Promise<User[]> {
         const connection = await pool.connect();
         try {
-            const sql = `SELECT * FROM users`;
+            const sql = `SELECT id, first_name, last_name, email FROM users`;
             const result = await connection.query(sql);
 
             return result.rows;
