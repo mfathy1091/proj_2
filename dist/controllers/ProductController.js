@@ -22,7 +22,7 @@ const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(product);
 });
 exports.show = show;
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const product = {
         name: req.body.name,
         price: req.body.price,
@@ -33,12 +33,11 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(newProduct);
     }
     catch (err) {
-        res.status(500);
-        res.json(err);
+        next(err);
     }
 });
 exports.create = create;
-const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const update = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const product = {
         name: req.body.name,
         price: req.body.price,
@@ -48,8 +47,7 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(newProduct);
     }
     catch (err) {
-        res.status(500);
-        res.json(err);
+        next(err);
     }
 });
 exports.update = update;

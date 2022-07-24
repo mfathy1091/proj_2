@@ -1,48 +1,64 @@
-
+// import pool from '../../config/database'
 // import UserStore from '../user'
-// import { hashPassword } from '../../utils/hashing'
+// import * as hashingService from '../../utils/hashing'
 
 // const store = new UserStore()
 
-// describe("User Model", () => {
-//     it('should have an index method', () => {
-//         expect(store.index).toBeDefined();
-//     });
-
-//     it('should have a show method', () => {
-//         expect(store.show).toBeDefined();
-//     });
-
-//     it('should have a create method', () => {
-//         expect(store.create).toBeDefined();
-//     });
-
-//     it('should have a update method', () => {
-//         expect(store.update).toBeDefined();
-//     });
-
-//     it('should have a delete method', () => {
-//         expect(store.delete).toBeDefined();
-//     });
-
-//     it('create method should add a user', async () => {
-//         const result = await store.create({
-//             first_name: 'John',
-//             last_name: 'Doe',
-//             email: 'john@gmail.com',
-//             password_digest: await hashPassword('password123')
+// describe("User Model >>", () => {
+//     describe('methods exists', () => {
+//         it('should have an index method', () => {
+//             expect(store.index).toBeDefined();
 //         });
-//         expect(result).toEqual({
-//             id: "1",
-//             first_name: 'John',
-//             last_name: 'Doe',
-//             email: 'john@gmail.com',
-//             password_digest: '$2b$10$j6pmR7ohipx0MoKFbtNHV.T84ClqK.pIXQ2ofSii0aL0K6V75VTCW'
+    
+//         it('should have a show method', () => {
+//             expect(store.show).toBeDefined();
+//         });
+    
+//         it('should have a create method', () => {
+//             expect(store.create).toBeDefined();
+//         });
+    
+//         it('should have a update method', () => {
+//             expect(store.update).toBeDefined();
+//         });
+    
+//         it('should have a delete method', () => {
+//             expect(store.delete).toBeDefined();
 //         });
 //     });
 
+//     describe('Testing Logic >>', async() => {
+//         beforeAll(async () => {
+//             const connection = await pool.connect();
+//             await connection.query('DELETE FROM users');
+//             await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
+//             await connection.release();
+//         })
+    
+//         afterAll(async () => {
+//             const connection = await pool.connect();
+//             await connection.query('DELETE FROM users');
+//             await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
+//             await connection.release();
+//         })
+    
+//         it('create method should add a user', async () => {
+//             const user = {
+//                 first_name: 'John',
+//                 last_name: 'Doe',
+//                 email: 'john@gmail.com',
+//                 password: await hashingService.hashPassword('password123')
+//             }
+            
+//             const createdUser = await store.create(user);
 
-//     // it('index method should return a list of products', async () => {
+//             expect(createdUser?.email).toEqual(user.email)
+//             expect(createdUser?.first_name).toEqual(user.first_name)
+//             const isPasswordValid = await hashingService.isPasswordValid('password123', user.password as string)
+//             expect(isPasswordValid).toBeTrue();
+//         });
+
+//            // it('index method should return a list of products', async () => {
 //     //     const result = await store.index();
 //     //     expect(result).toEqual([{
 //     //         id: "1",
@@ -70,6 +86,7 @@
 
 //     //     expect(result).toEqual([]);
 //     // });
+//     });
 
 
 // })

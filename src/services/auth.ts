@@ -2,38 +2,36 @@
 import pool from '../config/database';
 import bcrypt from 'bcrypt'
 import User  from '../types/user'
-import { json } from 'express';
+import * as hashingService from '../utils/hashing' 
 
 // let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD
 
 export default class authQueries {
     
-    async login(email: string, password: string): Promise<User | null> {
+    async login(email: string, plainTextPassword: string): Promise<User | null> {
         const connection = await pool.connect();
         try {
-            const sql = 'SELECT id, email, first_name, last_name, password_digest FROM users WHERE email=($1)'
+            const sql = 'SELECT id, email, first_name, last_name, password FROM users WHERE email=($1)'
             const result = await connection.query(sql, [email])
             const user = result.rows[0];
 
             // if user exists
             if(user){ 
-                const { password_digest: encryptedPassworerd } = user;
+                const { password: hashedPassword } = user;
                 
                 // compare passwords
-                const isPasswordValid = bcrypt.compareSync( password+pepper, encryptedPassworerd )
+                const isPasswordValid = await hashingService.isPasswordValid(plainTextPassword, hashedPassword)
                 
-                if(isPasswordValid){
+                if(isPasswordValid === true){
                     return user
                 }else{
-                    throw new Error(`Invalid password`)
+                    return null
                 }
             }else{
-                throw new Error(`Invalid Email or Password`)
+                return null
             }
-        } catch (err) {
-            
-            console.log(err)
+        } catch (err) {            
             throw new Error(`Unable to login: ${(err as Error).message}`);
         }finally{
             connection.release();

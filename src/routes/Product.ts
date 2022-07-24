@@ -1,25 +1,19 @@
 import express from 'express';
 import verifyAuthToken from '../middlewares/AuthMiddleware'
 
-import { 
-    index,
-    show,
-    create,
-    update,
-    destroy
-}  from '../controllers/ProductController'
+import * as controller from '../controllers/ProductController'
 
 const productRouter = express.Router();
 
-productRouter.get('/', index)
+productRouter.get('/', controller.index)
 
-productRouter.get('/:productID', show)
+productRouter.get('/:productID', controller.show)
 
-productRouter.post('/', verifyAuthToken, create) 
+productRouter.post('/', verifyAuthToken, controller.create) 
 
-productRouter.put('/:productID', update) 
+productRouter.put('/:productID', controller.update) 
 
-productRouter.delete('/:productID', destroy)
+productRouter.delete('/:productID', controller.destroy)
 
 
 

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import morgan from 'morgan'
 import router from './routes/index';
-import ErrorMiddleware from './middlewares/ErrorMiddleware'
+import ErrorHandler from './middlewares/ErrorHandler'
 
 const app: express.Application = express()
 const address: string = "127.0.0.1:"+ process.env.NODE_PORT
@@ -26,7 +26,7 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
     next(error)
 })
 
-app.use(ErrorMiddleware);
+app.use(ErrorHandler);
 
 
 

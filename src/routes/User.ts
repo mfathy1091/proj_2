@@ -1,18 +1,23 @@
 import express from 'express';
 import verifyAuthToken from '../middlewares/AuthMiddleware'
 
-import { 
-    index,
-    create,
-    show
-}  from '../controllers/UserController'
+import * as controller from '../controllers/UserController'
 
 const userRouter = express.Router();
 
-userRouter.get('/', verifyAuthToken, index)
+userRouter.get('/', verifyAuthToken, controller.index)
 
-userRouter.get('/:userId', verifyAuthToken, show)
+userRouter.get('/:userId', verifyAuthToken, controller.show)
 
-userRouter.post('/', verifyAuthToken, create)
+userRouter.post('/', verifyAuthToken, controller.create)
 
 export default userRouter;
+
+
+// const articleRoutes = (app: express.Application) => {
+//     app.get('/users', index)
+//     app.get('/users/:id', show)
+//     app.post('/users', create)
+//     app.delete('/users', destroy)
+//     app.post('/login', authenticate)
+// }

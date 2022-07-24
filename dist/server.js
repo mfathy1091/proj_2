@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const index_1 = __importDefault(require("./routes/index"));
-const ErrorMiddleware_1 = __importDefault(require("./middlewares/ErrorMiddleware"));
+const ErrorHandler_1 = __importDefault(require("./middlewares/ErrorHandler"));
 const app = (0, express_1.default)();
 const address = "127.0.0.1:" + process.env.NODE_PORT;
 app.use(express_1.default.json());
@@ -23,7 +23,7 @@ app.use((_req, res, next) => {
     };
     next(error);
 });
-app.use(ErrorMiddleware_1.default);
+app.use(ErrorHandler_1.default);
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`);
 });

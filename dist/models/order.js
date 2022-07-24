@@ -13,12 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderStore = void 0;
-//@ts-ignore
 const database_1 = __importDefault(require("../config/database"));
 class OrderStore {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
-            //@ts-ignore
             const connection = yield database_1.default.connect();
             try {
                 const sql = `SELECT * FROM orders`;
@@ -26,7 +24,7 @@ class OrderStore {
                 return result.rows;
             }
             catch (err) {
-                throw new Error(`Cannot get orders ${err}`);
+                throw new Error(`Cannot get orders  ${err.message}`);
             }
             finally {
                 connection.release();
@@ -36,7 +34,6 @@ class OrderStore {
     show(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = 'SELECT * FROM orders WHERE id=($1)';
                 const result = yield connection.query(sql, [id]);
@@ -44,14 +41,13 @@ class OrderStore {
                 connection.release();
             }
             catch (err) {
-                throw new Error(`Could not get orders. Error: ${err}`);
+                throw new Error(`Could not get orders. Error:  ${err.message}`);
             }
         });
     }
     create(order) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "INSERT INTO orders (status, user_id) VALUES ($1, $2) RETURNING *";
                 const result = yield connection.query(sql, [order.status, order.user_id]);
@@ -60,14 +56,13 @@ class OrderStore {
                 return newOrder;
             }
             catch (err) {
-                throw new Error(`Could not create Order. Error: ${err}`);
+                throw new Error(`Could not create Order. Error:  ${err.message}`);
             }
         });
     }
     update(id, order) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "UPDATE orders SET status = $1, user_id = $2 WHERE id=$5";
                 const result = yield connection.query(sql, [order.status, order.user_id]);
@@ -76,14 +71,13 @@ class OrderStore {
                 return updatedOrder;
             }
             catch (err) {
-                throw new Error(`Could not update order. Error: ${err}`);
+                throw new Error(`Could not update order. Error:  ${err.message}`);
             }
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "DELETE FROM orders WHERE id=$1";
                 const result = yield connection.query(sql, [id]);
@@ -92,7 +86,7 @@ class OrderStore {
                 return order;
             }
             catch (err) {
-                throw new Error(`Could not delete order ${id}. Error: ${err}`);
+                throw new Error(`Could not delete order ${id}. Error:  ${err.message}`);
             }
         });
     }
@@ -105,7 +99,6 @@ class OrderStore {
                 }
                 else {
                     const sql = "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
-                    //@ts-ignore
                     const connection = yield database_1.default.connect();
                     const result = yield connection.query(sql, [quantity, orderId, productId]);
                     connection.release();
@@ -114,7 +107,7 @@ class OrderStore {
                 }
             }
             catch (err) {
-                throw new Error(`Could not add product ${productId} to order ${orderId}. Error: ${err}`);
+                throw new Error(`Could not add product ${productId} to order ${orderId}. Error:  ${err.message}`);
             }
         });
     }

@@ -1,26 +1,19 @@
 import express from 'express';
 
-import { 
-    index,
-    show,
-    create,
-    update,
-    destroy,
-    addProduct
-}  from '../controllers/OrderController'
+import * as controller from '../controllers/OrderController'
 
 const orderRouter = express.Router();
 
-orderRouter.get('/', index)
+orderRouter.get('/', controller.index)
 
-orderRouter.get('/:orderId', show)
+orderRouter.get('/:orderId', controller.show)
 
-orderRouter.post('/', create) 
+orderRouter.post('/', controller.create) 
 
-orderRouter.put('/:orderId', update) 
+orderRouter.put('/:orderId', controller.update) 
 
-orderRouter.delete('/:orderId', destroy)
+orderRouter.delete('/:orderId', controller.destroy)
 
-orderRouter.post('/:orderId/products', addProduct)
+orderRouter.post('/:orderId/products', controller.addProduct)
 
 export default orderRouter;

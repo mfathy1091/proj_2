@@ -1,18 +1,22 @@
 
 import bcrypt from 'bcrypt'
 
+const saltRounds = process.env.SALT_ROUND
+const pepper = process.env.BCRYPT_PASSWORD
 
-const encryptPassword = async (password: string): Promise<string> => {
-    let saltRounds = process.env.SALT_ROUND
-    let pepper = process.env.BCRYPT_PASSWORD
-    
-    const encryptedPassword = bcrypt.hashSync(
+const hashPassword = async (password: string): Promise<string> => {
+    const hashedPassword = await bcrypt.hash(
         password + pepper,
         parseInt(saltRounds as string)
     );
 
-    return encryptedPassword;
+    return hashedPassword;
+}
+
+const isPasswordValid = async (password: string, hash: string): Promise<boolean> => {
+    const isPasswordValid = await bcrypt.compare( password+pepper, hash )
+    return isPasswordValid
 }
 
 
-export { encryptPassword }
+export { hashPassword, isPasswordValid}

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import { OrderStore } from '../models/order'
 import Order from '../types/order'
 
@@ -47,7 +47,7 @@ const destroy = async (req: Request, res: Response) => {
     res.json(deleted)
 }
 
-const addProduct = async (req: Request, res: Response) => {
+const addProduct = async (req: Request, res: Response, next:NextFunction) => {
     const orderId: string = req.params.orderId  // getting orderId from params
     const productId: string = req.body.productId
     const quantity: string = req.body.quantity
@@ -58,8 +58,7 @@ const addProduct = async (req: Request, res: Response) => {
         res.json(addedProduct)
         res.status(201)
     } catch(err) {
-        res.status(500)
-        res.json(err)    
+        next(err)    
     }
 }
 

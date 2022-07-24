@@ -57,7 +57,7 @@ const destroy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(deleted);
 });
 exports.destroy = destroy;
-const addProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const addProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const orderId = req.params.orderId; // getting orderId from params
     const productId = req.body.productId;
     const quantity = req.body.quantity;
@@ -68,8 +68,7 @@ const addProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(201);
     }
     catch (err) {
-        res.status(500);
-        res.json(err);
+        next(err);
     }
 });
 exports.addProduct = addProduct;

@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
-//@ts-ignore
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const auth_1 = __importDefault(require("../services/auth"));
 const auth = new auth_1.default();
@@ -21,12 +20,19 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const { email, password } = req.body;
         const user = yield auth.login(email, password);
-        const token = jsonwebtoken_1.default.sign({ user }, process.env.TOKEN_SECRET);
-        res.json(token);
+        if (user) {
+            const token = jsonwebtoken_1.default.sign({ user }, process.env.TOKEN_SECRET);
+            res.json({
+                'token': token,
+                'user': user
+            });
+        }
+        else {
+            throw new Error('Unable to Login: wrong credentials');
+        }
     }
     catch (err) {
-        res.status(401);
-        res.json(err.message);
+        next(err);
     }
 });
 exports.login = login;

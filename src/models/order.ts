@@ -1,4 +1,4 @@
-//@ts-ignore
+
 import pool from '../config/database';
 import { orderService } from '../services/orderService';
 import Order from '../types/order'
@@ -8,7 +8,7 @@ import Order from '../types/order'
 export class OrderStore {
     
     async index(): Promise<Order[]> {
-        //@ts-ignore
+        
         const connection = await pool.connect();
         try {
             const sql = `SELECT * FROM orders`;
@@ -16,7 +16,7 @@ export class OrderStore {
             
             return result.rows;
         } catch (err) {
-            throw new Error(`Cannot get orders ${err}`)
+            throw new Error(`Cannot get orders  ${(err as Error).message}`)
         } finally {
             connection.release();
         }
@@ -24,20 +24,20 @@ export class OrderStore {
 
     async show(id: string): Promise<Order | null> {
         try {
-            //@ts-ignore
+            
             const connection = await pool.connect();
             const sql = 'SELECT * FROM orders WHERE id=($1)';
             const result = await connection.query(sql, [id]);
             return result.rows[0];
             connection.release();
         } catch (err) {
-            throw new Error(`Could not get orders. Error: ${err}`)
+            throw new Error(`Could not get orders. Error:  ${(err as Error).message}`)
         }
     }
 
     async create(order: Order): Promise<Order> {
         try {
-            //@ts-ignore
+            
             const connection = await pool.connect();
             const sql = "INSERT INTO orders (status, user_id) VALUES ($1, $2) RETURNING *";
             const result = await connection.query(sql, [order.status, order.user_id]);
@@ -45,13 +45,13 @@ export class OrderStore {
             const newOrder = result.rows[0];
             return newOrder;
         } catch (err) {
-            throw new Error(`Could not create Order. Error: ${err}`)
+            throw new Error(`Could not create Order. Error:  ${(err as Error).message}`)
         }
     }
 
     async update(id: string, order: Omit<Order, "id">): Promise<Order> {
         try {
-            //@ts-ignore
+            
             const connection = await pool.connect();
             const sql = "UPDATE orders SET status = $1, user_id = $2 WHERE id=$5";
             const result = await connection.query(sql, [order.status, order.user_id]);
@@ -59,13 +59,13 @@ export class OrderStore {
             const updatedOrder = result.rows[0];
             return updatedOrder;
         } catch (err) {
-            throw new Error(`Could not update order. Error: ${err}`)
+            throw new Error(`Could not update order. Error:  ${(err as Error).message}`)
         }
     }
 
     async delete(id: string): Promise<void> {
         try {
-            //@ts-ignore
+            
             const connection = await pool.connect();
             const sql = "DELETE FROM orders WHERE id=$1";
             const result = await connection.query(sql, [id]);
@@ -73,7 +73,7 @@ export class OrderStore {
             const order = result.rows[0];
             return order;
         } catch (err) {
-            throw new Error(`Could not delete order ${id}. Error: ${err}`)
+            throw new Error(`Could not delete order ${id}. Error:  ${(err as Error).message}`)
         }
     }
     async addProduct(orderId: string, productId: string, quantity: string) {
@@ -83,7 +83,7 @@ export class OrderStore {
                 throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order?.status}`)
             }else{
                 const sql = "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
-                //@ts-ignore
+                
                 const connection = await pool.connect();
                 const result = await connection.query(sql, [quantity, orderId, productId]);
                 connection.release();
@@ -91,7 +91,7 @@ export class OrderStore {
                 return orderProduct;
             }
         } catch (err) {
-            throw new Error(`Could not add product ${productId} to order ${orderId}. Error: ${err}`)
+            throw new Error(`Could not add product ${productId} to order ${orderId}. Error:  ${(err as Error).message}`)
         }
     }
 

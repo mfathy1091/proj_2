@@ -1,11 +1,9 @@
-//@ts-ignore
 import pool from '../config/database';
 import Product from '../types/product'
 
 export class ProductStore {
     
     async index(): Promise<Product[]> {
-        //@ts-ignore
         const connection = await pool.connect();
         try {
             const sql = `SELECT * FROM products`;
@@ -13,7 +11,7 @@ export class ProductStore {
             
             return result.rows;
         } catch (err) {
-            throw new Error(`Cannot get products ${err}`)
+            throw new Error(`Cannot get products  ${(err as Error).message}`)
         } finally {
             connection.release();
         }
@@ -21,20 +19,18 @@ export class ProductStore {
 
     async show(id: string): Promise<Product> {
         try {
-            //@ts-ignore
             const connection = await pool.connect();
             const sql = 'SELECT * FROM products WHERE id=($1)';
             const result = await connection.query(sql, [id]);
             return result.rows[0];
             connection.release();
         } catch (err) {
-            throw new Error(`Could not get products. Error: ${err}`)
+            throw new Error(`Could not get products. Error:  ${(err as Error).message}`)
         }
     }
 
     async create(product: Product): Promise<Product> {
         try {
-            //@ts-ignore
             const connection = await pool.connect();
             const sql = "INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *";
             const result = await connection.query(sql, [product.name, product.price]);
@@ -42,13 +38,12 @@ export class ProductStore {
             const newProduct = result.rows[0];
             return newProduct;
         } catch (err) {
-            throw new Error(`Could not create product. Error: ${err}`)
+            throw new Error(`Could not create product. Error:  ${(err as Error).message}`)
         }
     }
 
     async update(id: string, product: Omit<Product, "id">): Promise<Product> {
         try {
-            //@ts-ignore
             const connection = await pool.connect();
             const sql = "UPDATE products SET title = $1, author = $2, total_pages = $3, summary =$4 WHERE id=$5";
             const result = await connection.query(sql, [product.name, product.price]);
@@ -56,13 +51,12 @@ export class ProductStore {
             const updatedProduct = result.rows[0];
             return updatedProduct;
         } catch (err) {
-            throw new Error(`Could not update product. Error: ${err}`)
+            throw new Error(`Could not update product. Error:  ${(err as Error).message}`)
         }
     }
 
     async delete(id: string): Promise<void> {
         try {
-            //@ts-ignore
             const connection = await pool.connect();
             const sql = "DELETE FROM products WHERE id=$1";
             const result = await connection.query(sql, [id]);
@@ -70,7 +64,7 @@ export class ProductStore {
             const product = result.rows[0];
             return product;
         } catch (err) {
-            throw new Error(`Could not delete product ${id}. Error: ${err}`)
+            throw new Error(`Could not delete product ${id}. Error:  ${(err as Error).message}`)
         }
     }
 

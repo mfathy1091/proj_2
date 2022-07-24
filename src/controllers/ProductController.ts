@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { ProductStore } from '../models/product'
 
 import Product from '../types/product'
@@ -15,7 +15,7 @@ const show = async (req: Request, res: Response) => {
     res.json(product)
 }
 
-const create = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response, next:NextFunction) => {
     const product: Product = {
         name: req.body.name,
         price: req.body.price,
@@ -25,12 +25,11 @@ const create = async (req: Request, res: Response) => {
         res.status(201)
         res.json(newProduct)
     } catch(err) {
-        res.status(500)
-        res.json(err)
+        next(err) 
     }
 }
 
-const update = async (req: Request, res: Response) => {
+const update = async (req: Request, res: Response, next:NextFunction) => {
     const product: Omit<Product, "id"> = {
         name: req.body.name,
         price: req.body.price,
@@ -39,8 +38,7 @@ const update = async (req: Request, res: Response) => {
         const newProduct = await store.update(req.params.productID, product)
         res.json(newProduct)
     } catch(err) {
-        res.status(500)
-        res.json(err)    
+        next(err)    
     }
 }
 

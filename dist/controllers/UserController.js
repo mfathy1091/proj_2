@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroy = exports.create = exports.show = exports.index = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const hashing_1 = require("../utils/hashing");
-//@ts-ignore
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const store = new user_1.default();
 const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,24 +27,26 @@ const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(user);
 });
 exports.show = show;
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const encryptedPassword = yield (0, hashing_1.encryptPassword)(req.body.password);
+const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const hashedPassword = yield (0, hashing_1.hashPassword)(req.body.password);
     const user = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
-        password_digest: encryptedPassword
+        password: hashedPassword
     };
     try {
         const newUser = yield store.create(user);
         let token = jsonwebtoken_1.default.sign({ user: newUser }, process.env.TOKEN_SECRET);
         res.status(201);
-        res.json(token);
+        res.json({
+            'message': 'Successfuly created!',
+            'user': user,
+            'token': token
+        });
     }
     catch (err) {
-        console.log(err);
-        res.status(500);
-        res.json(err.message);
+        next(err);
     }
 });
 exports.create = create;

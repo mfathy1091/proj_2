@@ -1,15 +1,38 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const OrderController_1 = require("../controllers/OrderController");
+const controller = __importStar(require("../controllers/OrderController"));
 const orderRouter = express_1.default.Router();
-orderRouter.get('/', OrderController_1.index);
-orderRouter.get('/:orderId', OrderController_1.show);
-orderRouter.post('/', OrderController_1.create);
-orderRouter.put('/:orderId', OrderController_1.update);
-orderRouter.delete('/:orderId', OrderController_1.destroy);
-orderRouter.post('/:orderId/products', OrderController_1.addProduct);
+orderRouter.get('/', controller.index);
+orderRouter.get('/:orderId', controller.show);
+orderRouter.post('/', controller.create);
+orderRouter.put('/:orderId', controller.update);
+orderRouter.delete('/:orderId', controller.destroy);
+orderRouter.post('/:orderId/products', controller.addProduct);
 exports.default = orderRouter;

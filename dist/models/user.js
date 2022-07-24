@@ -12,12 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//@ts-ignore
 const database_1 = __importDefault(require("../config/database"));
 class UserStore {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
-            //@ts-ignore
             const connection = yield database_1.default.connect();
             try {
                 const sql = `SELECT * FROM users`;
@@ -25,7 +23,7 @@ class UserStore {
                 return result.rows;
             }
             catch (err) {
-                throw new Error(`Cannot get users ${err}`);
+                throw new Error(`Cannot get users  ${err.message}`);
             }
             finally {
                 connection.release();
@@ -42,7 +40,7 @@ class UserStore {
                 return result.rows[0];
             }
             catch (err) {
-                throw new Error(`Could not get users. Error: ${err}`);
+                throw new Error(`Could not get users. Error:  ${err.message}`);
             }
         });
     }
@@ -50,22 +48,21 @@ class UserStore {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'INSERT INTO users (first_name, last_name, email, password_digest) VALUES($1, $2, $3, $4) RETURNING *';
-                const result = yield conn.query(sql, [user.first_name, user.last_name, user.email, user.password_digest]);
+                const sql = 'INSERT INTO users (first_name, last_name, email, password) VALUES($1, $2, $3, $4) RETURNING *';
+                const result = yield conn.query(sql, [user.first_name, user.last_name, user.email, user.password]);
                 const newUser = result.rows[0];
                 conn.release();
                 return newUser;
             }
             catch (err) {
                 console.log(err);
-                throw new Error(`unable create user (${user.email}): ${err} `);
+                throw new Error(`unable create user (${user.email}): ${err.message} `);
             }
         });
     }
     update(id, u) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "UPDATE users SET first_name = $1, last_name = $2, email = $3 WHERE id=$5";
                 const result = yield connection.query(sql, [u.first_name, u.last_name, u.email]);
@@ -74,7 +71,7 @@ class UserStore {
                 return user;
             }
             catch (err) {
-                throw new Error(`Could not update user. Error: ${err}`);
+                throw new Error(`Could not update user. Error:  ${err.message}`);
             }
         });
     }
@@ -89,7 +86,7 @@ class UserStore {
                 return user;
             }
             catch (err) {
-                throw new Error(`Could not delete user ${id}. Error: ${err}`);
+                throw new Error(`Could not delete user ${id}. Error:  ${err.message}`);
             }
         });
     }

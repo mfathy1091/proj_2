@@ -13,12 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductStore = void 0;
-//@ts-ignore
 const database_1 = __importDefault(require("../config/database"));
 class ProductStore {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
-            //@ts-ignore
             const connection = yield database_1.default.connect();
             try {
                 const sql = `SELECT * FROM products`;
@@ -26,7 +24,7 @@ class ProductStore {
                 return result.rows;
             }
             catch (err) {
-                throw new Error(`Cannot get products ${err}`);
+                throw new Error(`Cannot get products  ${err.message}`);
             }
             finally {
                 connection.release();
@@ -36,7 +34,6 @@ class ProductStore {
     show(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = 'SELECT * FROM products WHERE id=($1)';
                 const result = yield connection.query(sql, [id]);
@@ -44,14 +41,13 @@ class ProductStore {
                 connection.release();
             }
             catch (err) {
-                throw new Error(`Could not get products. Error: ${err}`);
+                throw new Error(`Could not get products. Error:  ${err.message}`);
             }
         });
     }
     create(product) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *";
                 const result = yield connection.query(sql, [product.name, product.price]);
@@ -60,14 +56,13 @@ class ProductStore {
                 return newProduct;
             }
             catch (err) {
-                throw new Error(`Could not create product. Error: ${err}`);
+                throw new Error(`Could not create product. Error:  ${err.message}`);
             }
         });
     }
     update(id, product) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "UPDATE products SET title = $1, author = $2, total_pages = $3, summary =$4 WHERE id=$5";
                 const result = yield connection.query(sql, [product.name, product.price]);
@@ -76,14 +71,13 @@ class ProductStore {
                 return updatedProduct;
             }
             catch (err) {
-                throw new Error(`Could not update product. Error: ${err}`);
+                throw new Error(`Could not update product. Error:  ${err.message}`);
             }
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //@ts-ignore
                 const connection = yield database_1.default.connect();
                 const sql = "DELETE FROM products WHERE id=$1";
                 const result = yield connection.query(sql, [id]);
@@ -92,7 +86,7 @@ class ProductStore {
                 return product;
             }
             catch (err) {
-                throw new Error(`Could not delete product ${id}. Error: ${err}`);
+                throw new Error(`Could not delete product ${id}. Error:  ${err.message}`);
             }
         });
     }
