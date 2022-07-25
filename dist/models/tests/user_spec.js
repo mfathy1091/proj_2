@@ -102,7 +102,7 @@ describe("User Model >>", () => {
             expect(isPasswordValid).toBeTrue();
         }));
         it('delete method should remove the user', () => __awaiter(void 0, void 0, void 0, function* () {
-            userModel.delete("1");
+            yield userModel.delete("1");
             const result = yield userModel.index();
             expect(result).toEqual([]);
         }));

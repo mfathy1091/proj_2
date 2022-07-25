@@ -68,22 +68,22 @@ describe("User Model >>", () => {
             }]);
         })
 
-    it('show method should return the correct user', async () => {
-        const result = await userModel.show("1");
-        expect(result.id).toEqual(1);
-        expect(result.email).toEqual('john@gmail.com');
-        expect(result.first_name).toEqual('John');
-        expect(result.last_name).toEqual('Doe');
-        const isPasswordValid = await hashingService.isPasswordValid('password123', result.password as string)
-        expect(isPasswordValid).toBeTrue();
-    });
+        it('show method should return the correct user', async () => {
+            const result = await userModel.show("1");
+            expect(result.id).toEqual(1);
+            expect(result.email).toEqual('john@gmail.com');
+            expect(result.first_name).toEqual('John');
+            expect(result.last_name).toEqual('Doe');
+            const isPasswordValid = await hashingService.isPasswordValid('password123', result.password as string)
+            expect(isPasswordValid).toBeTrue();
+        });
 
-    it('delete method should remove the user', async () => {
-        userModel.delete("1");
-        const result = await userModel.index()
+        it('delete method should remove the user', async () => {
+            await userModel.delete("1");
+            const result = await userModel.index()
 
-        expect(result).toEqual([]);
-    });
+            expect(result).toEqual([]);
+        });
     });
 
 

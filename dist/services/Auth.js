@@ -38,7 +38,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../config/database"));
 const hashingService = __importStar(require("../utils/hashing"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD;
 class AuthService {
     login(email, plainTextPassword) {

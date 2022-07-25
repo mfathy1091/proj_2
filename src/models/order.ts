@@ -1,6 +1,5 @@
 
 import pool from '../config/database';
-import { orderService } from '../services/orderService';
 import Order from '../types/order'
 
 

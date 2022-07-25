@@ -35,46 +35,80 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Auth_1 = __importDefault(require("../Auth"));
-const User_1 = __importDefault(require("../../models/User"));
 const database_1 = __importDefault(require("../../config/database"));
+const Order_1 = __importDefault(require("../Order"));
+const User_1 = __importDefault(require("../User"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const store = new User_1.default();
-const authService = new Auth_1.default();
-describe('Authentication Module', () => {
-    it('login method exists', () => {
-        expect(authService.login).toBeDefined();
-    });
-    let user;
+const orderModel = new Order_1.default();
+const userModel = new User_1.default();
+describe("Order Model", () => __awaiter(void 0, void 0, void 0, function* () {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();
+        yield connection.query('DELETE FROM orders');
+        yield connection.query('ALTER SEQUENCE orders_id_seq RESTART WITH 1');
         yield connection.query('DELETE FROM users');
         yield connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
         yield connection.release();
-        user = {
-            id: 1,
+        yield userModel.create({
             first_name: 'John',
             last_name: 'Doe',
             email: 'john@gmail.com',
             password: yield hashingService.hashPassword('password123')
-        };
-        yield store.create(user);
+        });
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();
+        yield connection.query('DELETE FROM orders');
+        yield connection.query('ALTER SEQUENCE orders_id_seq RESTART WITH 1');
         yield connection.query('DELETE FROM users');
         yield connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
         yield connection.release();
     }));
-    it('login method returns the auth user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'password123');
-        expect(authUser).not.toBe(null);
-        expect(authUser === null || authUser === void 0 ? void 0 : authUser.email).toEqual(user.email);
-        const isPasswordValid = yield hashingService.isPasswordValid('password123', user.password);
-        expect(isPasswordValid).toBeTrue();
+    it('should have an index method', () => {
+        expect(orderModel.index).toBeDefined();
+    });
+    it('should have a show method', () => {
+        expect(orderModel.index).toBeDefined();
+    });
+    it('should have a create method', () => {
+        expect(orderModel.index).toBeDefined();
+    });
+    it('should have a update method', () => {
+        expect(orderModel.index).toBeDefined();
+    });
+    it('should have a delete method', () => {
+        expect(orderModel.index).toBeDefined();
+    });
+    it('create method should add a order', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield orderModel.create({
+            status: 'compeleted',
+            user_id: '1',
+        });
+        expect(result).toEqual({
+            id: 1,
+            status: 'compeleted',
+            user_id: '1',
+        });
     }));
-    it('login method returns null when credentials are wrong', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'wrongpassword');
-        expect(authUser).toBe(null);
+    it('index method should return a list of orders', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield orderModel.index();
+        expect(result).toEqual([{
+                id: 1,
+                status: 'compeleted',
+                user_id: '1',
+            }]);
     }));
-});
+    it('show method should return the correct order', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield orderModel.show("1");
+        expect(result).toEqual({
+            id: 1,
+            status: 'compeleted',
+            user_id: '1',
+        });
+    }));
+    it('delete method should remove the order', () => __awaiter(void 0, void 0, void 0, function* () {
+        yield orderModel.delete("1");
+        const result = yield orderModel.index();
+        expect(result).toEqual([]);
+    }));
+}));

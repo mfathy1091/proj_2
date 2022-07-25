@@ -1,7 +1,7 @@
 type Product = {
     id?: number,
     name: string,
-    price: number,
+    price: string,
 }
 
 export default Product;

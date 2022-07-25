@@ -12,16 +12,67 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const product_1 = __importDefault(require("../product"));
-const Auth_1 = __importDefault(require("../../services/Auth"));
-const authService = new Auth_1.default();
-const productModel = new product_1.default();
-describe("Product model", () => {
-    beforeAll(() => {
-        authService.createAccount({ username: 'testUser', password: 'password123' });
-    });
-    it('Lists products', () => __awaiter(void 0, void 0, void 0, function* () {
-        const products = yield productModel.index();
-        expect();
+const database_1 = __importDefault(require("../../config/database"));
+const Product_1 = __importDefault(require("../Product"));
+const productModel = new Product_1.default();
+describe("Product Model", () => __awaiter(void 0, void 0, void 0, function* () {
+    beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        const connection = yield database_1.default.connect();
+        yield connection.query('DELETE FROM products');
+        yield connection.query('ALTER SEQUENCE products_id_seq RESTART WITH 1');
+        yield connection.release();
     }));
-});
+    afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        const connection = yield database_1.default.connect();
+        yield connection.query('DELETE FROM products');
+        yield connection.query('ALTER SEQUENCE products_id_seq RESTART WITH 1');
+        yield connection.release();
+    }));
+    it('should have an index method', () => {
+        expect(productModel.index).toBeDefined();
+    });
+    it('should have a show method', () => {
+        expect(productModel.index).toBeDefined();
+    });
+    it('should have a create method', () => {
+        expect(productModel.index).toBeDefined();
+    });
+    it('should have a update method', () => {
+        expect(productModel.index).toBeDefined();
+    });
+    it('should have a delete method', () => {
+        expect(productModel.index).toBeDefined();
+    });
+    it('create method should add a product', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield productModel.create({
+            name: '32 inch screen',
+            price: '3200.99',
+        });
+        expect(result).toEqual({
+            id: 1,
+            name: '32 inch screen',
+            price: '3200.99',
+        });
+    }));
+    it('index method should return a list of products', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield productModel.index();
+        expect(result).toEqual([{
+                id: 1,
+                name: '32 inch screen',
+                price: '3200.99',
+            }]);
+    }));
+    it('show method should return the correct product', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield productModel.show("1");
+        expect(result).toEqual({
+            id: 1,
+            name: '32 inch screen',
+            price: '3200.99',
+        });
+    }));
+    it('delete method should remove the product', () => __awaiter(void 0, void 0, void 0, function* () {
+        yield productModel.delete("1");
+        const result = yield productModel.index();
+        expect(result).toEqual([]);
+    }));
+}));

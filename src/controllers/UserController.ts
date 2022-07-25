@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import UserModel from '../models/User'
 import { hashPassword } from '../utils/hashing'
 import User from '../types/user'

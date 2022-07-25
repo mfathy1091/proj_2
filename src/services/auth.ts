@@ -4,7 +4,6 @@ import User  from '../types/user'
 import * as hashingService from '../utils/hashing' 
 import jwt from 'jsonwebtoken'
 
-// let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD
 
 export default class AuthService {

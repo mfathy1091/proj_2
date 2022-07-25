@@ -1,5 +1,20 @@
 # Storefront Backend Project
 
+## .env variablesNODE_ENV = dev
+NODE_PORT = 3000
+
+POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
+POSTGRES_DB=store_front
+POSTGRES_DB_TEST=store_front_test
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+
+BCRYPT_PASSWORD=speak-friend-and-enter
+SALT_ROUND=10
+TOKEN_SECRET=secret123
+
+
 ## Getting Started
 
 This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.

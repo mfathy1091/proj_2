@@ -8,17 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addProduct = exports.destroy = exports.update = exports.create = exports.show = exports.index = void 0;
-const order_1 = require("../models/order");
-const store = new order_1.OrderStore();
+const Order_1 = __importDefault(require("../models/Order"));
+const orderModel = new Order_1.default();
 const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const orders = yield store.index();
+    const orders = yield orderModel.index();
     res.json(orders);
 });
 exports.index = index;
 const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const order = yield store.show(req.params.orderID);
+    const order = yield orderModel.show(req.params.orderID);
     res.json(order);
 });
 exports.show = show;
@@ -28,7 +31,7 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         user_id: req.body.user_id,
     };
     try {
-        const newOrder = yield store.create(order);
+        const newOrder = yield orderModel.create(order);
         res.json(newOrder);
     }
     catch (err) {
@@ -43,7 +46,7 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         user_id: req.body.user_id,
     };
     try {
-        const updatedOrder = yield store.update(req.params.orderID, order);
+        const updatedOrder = yield orderModel.update(req.params.orderID, order);
         res.json(updatedOrder);
     }
     catch (err) {
@@ -53,7 +56,7 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.update = update;
 const destroy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const deleted = yield store.delete(req.body.id);
+    const deleted = yield orderModel.delete(req.body.id);
     res.json(deleted);
 });
 exports.destroy = destroy;
@@ -62,7 +65,7 @@ const addProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     const productId = req.body.productId;
     const quantity = req.body.quantity;
     try {
-        const addedProduct = yield store.addProduct(orderId, productId, quantity);
+        const addedProduct = yield orderModel.addProduct(orderId, productId, quantity);
         console.log(addedProduct);
         res.json(addedProduct);
         res.status(201);

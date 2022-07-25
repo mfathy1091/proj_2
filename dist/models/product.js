@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductModel = void 0;
 const database_1 = __importDefault(require("../config/database"));
 class ProductModel {
     index() {
@@ -91,4 +90,4 @@ class ProductModel {
         });
     }
 }
-exports.ProductModel = ProductModel;
+exports.default = ProductModel;
