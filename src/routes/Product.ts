@@ -1,7 +1,7 @@
 import express from 'express';
 import verifyAuthToken from '../middlewares/AuthMiddleware'
 
-import * as controller from '../controllers/ProductController'
+import * as controller from '../handlers/Product'
 
 const productRouter = express.Router();
 
@@ -11,9 +11,9 @@ productRouter.get('/:productID', controller.show)
 
 productRouter.post('/', verifyAuthToken, controller.create) 
 
-productRouter.put('/:productID', controller.update) 
+productRouter.put('/:productID', verifyAuthToken, controller.update) 
 
-productRouter.delete('/:productID', controller.destroy)
+productRouter.delete('/:productID', verifyAuthToken, controller.destroy)
 
 
 

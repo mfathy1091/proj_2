@@ -33,6 +33,6 @@ const productRouter = express_1.default.Router();
 productRouter.get('/', controller.index);
 productRouter.get('/:productID', controller.show);
 productRouter.post('/', AuthMiddleware_1.default, controller.create);
-productRouter.put('/:productID', controller.update);
-productRouter.delete('/:productID', controller.destroy);
+productRouter.put('/:productID', AuthMiddleware_1.default, controller.update);
+productRouter.delete('/:productID', AuthMiddleware_1.default, controller.destroy);
 exports.default = productRouter;

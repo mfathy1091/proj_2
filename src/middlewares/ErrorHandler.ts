@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import Error from '../interfaces/Error'
+interface Error {
+    name? : string,
+    message?: string,
+    stack?: string,
+    status?: number,
+}
 
 const ErrorHandler = (error: Error, _req: Request, res: Response, next: NextFunction) => {
     const status = error.status || 500;

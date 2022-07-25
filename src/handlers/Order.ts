@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import OrderModel from '../models/Order'
 import Order from '../types/order'
 
@@ -48,6 +48,21 @@ const destroy = async (req: Request, res: Response) => {
 }
 
 const addProduct = async (req: Request, res: Response, next:NextFunction) => {
+    const orderId: string = req.params.orderId  // getting orderId from params
+    const productId: string = req.body.productId
+    const quantity: string = req.body.quantity
+    
+    try {
+        const addedProduct = await orderModel.addProduct(orderId, productId, quantity)
+        console.log(addedProduct)
+        res.json(addedProduct)
+        res.status(201)
+    } catch(err) {
+        next(err)    
+    }
+}
+
+const getCurrentOrder = async (req: Request, res: Response, next:NextFunction) => {
     const orderId: string = req.params.orderId  // getting orderId from params
     const productId: string = req.body.productId
     const quantity: string = req.body.quantity

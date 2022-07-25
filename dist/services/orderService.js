@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderService = void 0;
 //@ts-ignore
 const database_1 = __importDefault(require("../config/database"));
-const order_1 = __importDefault(require("../models/order"));
-const orderModel = new order_1.default();
+const Order_1 = __importDefault(require("../models/Order"));
+const orderModel = new Order_1.default();
 const getStaus = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //@ts-ignore

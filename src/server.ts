@@ -16,7 +16,12 @@ app.use(morgan("common"))
 
 app.use('/api', router);
 
-import Error from './interfaces/Error'
+interface Error {
+    name? : string,
+    message?: string,
+    stack?: string,
+    status?: number,
+}
 
 app.use((_req: Request, res: Response, next: NextFunction) => {
     const error: Error = {

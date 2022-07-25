@@ -32,12 +32,5 @@ const controller = __importStar(require("../controllers/UserController"));
 const userRouter = express_1.default.Router();
 userRouter.get('/', AuthMiddleware_1.default, controller.index);
 userRouter.get('/:userId', AuthMiddleware_1.default, controller.show);
-userRouter.post('/', AuthMiddleware_1.default, controller.create);
+userRouter.post('/', controller.create);
 exports.default = userRouter;
-// const articleRoutes = (app: express.Application) => {
-//     app.get('/users', index)
-//     app.get('/users/:id', show)
-//     app.post('/users', create)
-//     app.delete('/users', destroy)
-//     app.post('/login', authenticate)
-// }
