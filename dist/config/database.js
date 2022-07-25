@@ -30,6 +30,9 @@ if (NODE_ENV === 'dev') {
         password: POSTGRES_PASSWORD,
     };
 }
+if (!NODE_ENV || !['dev', 'test']) {
+    throw new Error('NODE_ENV is not set');
+}
 const pool = new pg_1.Pool(envVariables);
 pool.on('error', (error) => {
     console.error(error.message);

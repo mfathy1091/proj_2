@@ -1,15 +1,15 @@
-import authQueries from '../auth'
-import UserStore from '../../models/user'
+import AuthService from '../Auth'
+import UserStore from '../../models/User'
 import pool from '../../config/database'
 import User from '../../types/user'
 import * as hashingService from '../../utils/hashing'
 
 const store = new UserStore()
-const authService = new authQueries();
+const auth = new AuthService();
 
 describe('Authentication Module', () => {
     it('login method exists', () => {
-        expect(authService.login).toBeDefined();
+        expect(auth.login).toBeDefined();
     });
 
     let user: User
@@ -39,7 +39,7 @@ describe('Authentication Module', () => {
 
     it('login method returns the auth user', async() => {
         
-        const authUser = await authService.login(user.email, 'password123')            
+        const authUser = await auth.login(user.email, 'password123')            
         expect(authUser).not.toBe(null)
         expect(authUser?.email).toEqual(user.email)
         const isPasswordValid = await hashingService.isPasswordValid('password123', user.password as string)
@@ -47,7 +47,7 @@ describe('Authentication Module', () => {
     });
 
     it('login method returns null when credentials are wrong', async() => {
-        const authUser = await authService.login(user.email, 'wrongpassword')
+        const authUser = await auth.login(user.email, 'wrongpassword')
         expect(authUser).toBe(null)
     });
 

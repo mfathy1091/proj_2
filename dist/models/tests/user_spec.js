@@ -36,25 +36,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../config/database"));
-const user_1 = __importDefault(require("../user"));
+const User_1 = __importDefault(require("../User"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const store = new user_1.default();
+const userModel = new User_1.default();
 describe("User Model >>", () => {
     describe('methods exists', () => {
         it('should have an index method', () => {
-            expect(store.index).toBeDefined();
+            expect(userModel.index).toBeDefined();
         });
         it('should have a show method', () => {
-            expect(store.show).toBeDefined();
+            expect(userModel.show).toBeDefined();
         });
         it('should have a create method', () => {
-            expect(store.create).toBeDefined();
+            expect(userModel.create).toBeDefined();
         });
         it('should have a update method', () => {
-            expect(store.update).toBeDefined();
+            expect(userModel.update).toBeDefined();
         });
         it('should have a delete method', () => {
-            expect(store.delete).toBeDefined();
+            expect(userModel.delete).toBeDefined();
         });
     });
     describe('Testing Logic >>', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -77,14 +77,14 @@ describe("User Model >>", () => {
                 email: 'john@gmail.com',
                 password: yield hashingService.hashPassword('password123')
             };
-            const createdUser = yield store.create(user);
+            const createdUser = yield userModel.create(user);
             expect(createdUser === null || createdUser === void 0 ? void 0 : createdUser.email).toEqual(user.email);
             expect(createdUser === null || createdUser === void 0 ? void 0 : createdUser.first_name).toEqual(user.first_name);
             const isPasswordValid = yield hashingService.isPasswordValid('password123', user.password);
             expect(isPasswordValid).toBeTrue();
         }));
         it('index method should return a list of users', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield store.index();
+            const result = yield userModel.index();
             expect(result).toEqual([{
                     id: 1,
                     first_name: 'John',
@@ -93,7 +93,7 @@ describe("User Model >>", () => {
                 }]);
         }));
         it('show method should return the correct user', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield store.show("1");
+            const result = yield userModel.show("1");
             expect(result.id).toEqual(1);
             expect(result.email).toEqual('john@gmail.com');
             expect(result.first_name).toEqual('John');
@@ -102,8 +102,8 @@ describe("User Model >>", () => {
             expect(isPasswordValid).toBeTrue();
         }));
         it('delete method should remove the user', () => __awaiter(void 0, void 0, void 0, function* () {
-            store.delete("1");
-            const result = yield store.index();
+            userModel.delete("1");
+            const result = yield userModel.index();
             expect(result).toEqual([]);
         }));
     }));

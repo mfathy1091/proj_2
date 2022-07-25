@@ -39,6 +39,10 @@ if (NODE_ENV === 'dev') {
     }
 }
 
+if(!NODE_ENV || !['dev', 'test']){
+    throw new Error('NODE_ENV is not set')
+}
+
 const pool = new Pool(envVariables);
 
 pool.on('error', (error: Error) => {

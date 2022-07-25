@@ -1,7 +1,7 @@
 import pool from '../config/database';
 import Product from '../types/product'
 
-export class ProductStore {
+export default class ProductModel {
     
     async index(): Promise<Product[]> {
         const connection = await pool.connect();

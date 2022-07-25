@@ -1,19 +1,19 @@
 import express, { NextFunction, Request, Response } from 'express'
-import UserStore from '../models/user'
+import UserModel from '../models/User'
 import { hashPassword } from '../utils/hashing'
 import User from '../types/user'
 import jwt from 'jsonwebtoken'
 
 
-const store = new UserStore()
+const userModel = new UserModel()
 
 const index = async (_req: Request, res: Response) => {
-    const users = await store.index()
+    const users = await userModel.index()
     res.json(users)
 }
 
 const show = async (req: Request, res: Response) => {
-    const user = await store.show(req.params.userId)
+    const user = await userModel.show(req.params.userId)
     res.json(user)
 }
 
@@ -26,7 +26,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
         password: hashedPassword
     }
     try {
-        const newUser = await store.create(user)
+        const newUser = await userModel.create(user)
         let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as unknown as string)
         res.status(201)
         res.json({
@@ -41,7 +41,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.body.id)
+    const deleted = await userModel.delete(req.body.id)
     res.json(deleted)
 }
 

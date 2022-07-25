@@ -1,7 +1,9 @@
 import {Request, Response, NextFunction} from 'express'
-import jwt from 'jsonwebtoken'
+import AuthService from '../services/Auth'
 
-const verifyAuthToken = (req: Request, res: Response, next:NextFunction) => {
+const authService = new AuthService;
+
+const AuthMiddleware = (req: Request, res: Response, next:NextFunction) => {
     try {
         const { authorization: authorizationHeader } = req.headers
         if(!authorizationHeader) {
@@ -9,7 +11,7 @@ const verifyAuthToken = (req: Request, res: Response, next:NextFunction) => {
         }
         //@ts-ignore
         const token = authorizationHeader.split(' ')[1]
-        const decoded = jwt.verify(token, process.env.TOKEN_SECRET as unknown as string)
+        const decoded = authService.verifyToken(token)
 
         next() // No error proceed to next middleware
     } catch (err) {
@@ -18,4 +20,7 @@ const verifyAuthToken = (req: Request, res: Response, next:NextFunction) => {
     }
 }
 
-export default verifyAuthToken
+
+
+
+export default AuthMiddleware

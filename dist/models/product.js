@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductStore = void 0;
+exports.ProductModel = void 0;
 const database_1 = __importDefault(require("../config/database"));
-class ProductStore {
+class ProductModel {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
             const connection = yield database_1.default.connect();
@@ -91,4 +91,4 @@ class ProductStore {
         });
     }
 }
-exports.ProductStore = ProductStore;
+exports.ProductModel = ProductModel;

@@ -5,7 +5,7 @@ import Order from '../types/order'
 
 
 
-export class OrderStore {
+export default class OrderModel {
     
     async index(): Promise<Order[]> {
         

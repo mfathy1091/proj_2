@@ -1,13 +1,13 @@
 
 import pool from '../config/database';
-import bcrypt from 'bcrypt'
 import User  from '../types/user'
 import * as hashingService from '../utils/hashing' 
+import jwt from 'jsonwebtoken'
 
 // let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD
 
-export default class authQueries {
+export default class AuthService {
     
     async login(email: string, plainTextPassword: string): Promise<User | null> {
         const connection = await pool.connect();
@@ -39,7 +39,18 @@ export default class authQueries {
         
     }
 
+    createToken(user: User, ): string{
+        const token = jwt.sign({user}, process.env.TOKEN_SECRET as unknown as string);
+        return token;
+    }
 
+    verifyToken(token: string){
+        try {
+            const decoded = jwt.verify(token, process.env.TOKEN_SECRET as unknown as string)
+        } catch (error) {
+            return error
+        }    
+    }
 
 
 }

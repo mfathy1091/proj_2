@@ -35,15 +35,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const auth_1 = __importDefault(require("../auth"));
-const user_1 = __importDefault(require("../../models/user"));
+const Auth_1 = __importDefault(require("../Auth"));
+const User_1 = __importDefault(require("../../models/User"));
 const database_1 = __importDefault(require("../../config/database"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const store = new user_1.default();
-const authService = new auth_1.default();
+const store = new User_1.default();
+const auth = new Auth_1.default();
 describe('Authentication Module', () => {
     it('login method exists', () => {
-        expect(authService.login).toBeDefined();
+        expect(auth.login).toBeDefined();
     });
     let user;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,14 +67,14 @@ describe('Authentication Module', () => {
         yield connection.release();
     }));
     it('login method returns the auth user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'password123');
+        const authUser = yield auth.login(user.email, 'password123');
         expect(authUser).not.toBe(null);
         expect(authUser === null || authUser === void 0 ? void 0 : authUser.email).toEqual(user.email);
         const isPasswordValid = yield hashingService.isPasswordValid('password123', user.password);
         expect(isPasswordValid).toBeTrue();
     }));
     it('login method returns null when credentials are wrong', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'wrongpassword');
+        const authUser = yield auth.login(user.email, 'wrongpassword');
         expect(authUser).toBe(null);
     }));
 });

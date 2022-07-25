@@ -13,17 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroy = exports.create = exports.show = exports.index = void 0;
-const user_1 = __importDefault(require("../models/user"));
+const User_1 = __importDefault(require("../models/User"));
 const hashing_1 = require("../utils/hashing");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const store = new user_1.default();
+const userModel = new User_1.default();
 const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield store.index();
+    const users = yield userModel.index();
     res.json(users);
 });
 exports.index = index;
 const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield store.show(req.params.userId);
+    const user = yield userModel.show(req.params.userId);
     res.json(user);
 });
 exports.show = show;
@@ -36,7 +36,7 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         password: hashedPassword
     };
     try {
-        const newUser = yield store.create(user);
+        const newUser = yield userModel.create(user);
         let token = jsonwebtoken_1.default.sign({ user: newUser }, process.env.TOKEN_SECRET);
         res.status(201);
         res.json({
@@ -51,7 +51,7 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.create = create;
 const destroy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const deleted = yield store.delete(req.body.id);
+    const deleted = yield userModel.delete(req.body.id);
     res.json(deleted);
 });
 exports.destroy = destroy;

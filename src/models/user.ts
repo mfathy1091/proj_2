@@ -1,7 +1,7 @@
 import pool from '../config/database';
 import User from '../types/user'
 
-export default class UserStore {
+export default class UserModel {
 
     async index(): Promise<User[]> {
         const connection = await pool.connect();

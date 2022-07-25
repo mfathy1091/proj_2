@@ -1,29 +1,29 @@
 import pool from '../../config/database'
-import UserStore from '../user'
+import UserModel from '../User'
 import * as hashingService from '../../utils/hashing'
 
-const store = new UserStore()
+const userModel = new UserModel()
 
 describe("User Model >>", () => {
     describe('methods exists', () => {
         it('should have an index method', () => {
-            expect(store.index).toBeDefined();
+            expect(userModel.index).toBeDefined();
         });
     
         it('should have a show method', () => {
-            expect(store.show).toBeDefined();
+            expect(userModel.show).toBeDefined();
         });
     
         it('should have a create method', () => {
-            expect(store.create).toBeDefined();
+            expect(userModel.create).toBeDefined();
         });
     
         it('should have a update method', () => {
-            expect(store.update).toBeDefined();
+            expect(userModel.update).toBeDefined();
         });
     
         it('should have a delete method', () => {
-            expect(store.delete).toBeDefined();
+            expect(userModel.delete).toBeDefined();
         });
     });
 
@@ -50,7 +50,7 @@ describe("User Model >>", () => {
                 password: await hashingService.hashPassword('password123')
             }
             
-            const createdUser = await store.create(user);
+            const createdUser = await userModel.create(user);
 
             expect(createdUser?.email).toEqual(user.email)
             expect(createdUser?.first_name).toEqual(user.first_name)
@@ -59,7 +59,7 @@ describe("User Model >>", () => {
         });
 
         it('index method should return a list of users', async () => {
-            const result = await store.index();
+            const result = await userModel.index();
             expect(result).toEqual([{
                 id: 1,
                 first_name: 'John',
@@ -69,7 +69,7 @@ describe("User Model >>", () => {
         })
 
     it('show method should return the correct user', async () => {
-        const result = await store.show("1");
+        const result = await userModel.show("1");
         expect(result.id).toEqual(1);
         expect(result.email).toEqual('john@gmail.com');
         expect(result.first_name).toEqual('John');
@@ -79,8 +79,8 @@ describe("User Model >>", () => {
     });
 
     it('delete method should remove the user', async () => {
-        store.delete("1");
-        const result = await store.index()
+        userModel.delete("1");
+        const result = await userModel.index()
 
         expect(result).toEqual([]);
     });

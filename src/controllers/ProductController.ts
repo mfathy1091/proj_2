@@ -1,17 +1,17 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { ProductStore } from '../models/product'
+import ProductModel from '../models/Product'
 
 import Product from '../types/product'
 
-const store = new ProductStore()
+const productModel = new ProductModel()
 
 const index = async (_req: Request, res: Response) => {
-    const products = await store.index()
+    const products = await productModel.index()
     res.json(products)
 }
 
 const show = async (req: Request, res: Response) => {
-    const product = await store.show(req.params.productID)
+    const product = await productModel.show(req.params.productID)
     res.json(product)
 }
 
@@ -21,7 +21,7 @@ const create = async (req: Request, res: Response, next:NextFunction) => {
         price: req.body.price,
     }
     try {
-        const newProduct = await store.create(product)
+        const newProduct = await productModel.create(product)
         res.status(201)
         res.json(newProduct)
     } catch(err) {
@@ -35,7 +35,7 @@ const update = async (req: Request, res: Response, next:NextFunction) => {
         price: req.body.price,
     }
     try {
-        const newProduct = await store.update(req.params.productID, product)
+        const newProduct = await productModel.update(req.params.productID, product)
         res.json(newProduct)
     } catch(err) {
         next(err)    
@@ -43,7 +43,7 @@ const update = async (req: Request, res: Response, next:NextFunction) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.body.id)
+    const deleted = await productModel.delete(req.body.id)
     res.json(deleted)
 }
 

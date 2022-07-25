@@ -37,9 +37,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../config/database"));
 const hashingService = __importStar(require("../utils/hashing"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // let saltRounds = process.env.SALT_ROUND
 let pepper = process.env.BCRYPT_PASSWORD;
-class authQueries {
+class AuthService {
     login(email, plainTextPassword) {
         return __awaiter(this, void 0, void 0, function* () {
             const connection = yield database_1.default.connect();
@@ -71,5 +72,17 @@ class authQueries {
             }
         });
     }
+    createToken(user) {
+        const token = jsonwebtoken_1.default.sign({ user }, process.env.TOKEN_SECRET);
+        return token;
+    }
+    verifyToken(token) {
+        try {
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
+        }
+        catch (error) {
+            return error;
+        }
+    }
 }
-exports.default = authQueries;
+exports.default = AuthService;

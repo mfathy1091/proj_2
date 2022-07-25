@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const verifyAuthToken = (req, res, next) => {
+const Auth_1 = __importDefault(require("../services/Auth"));
+const authService = new Auth_1.default;
+const AuthMiddleware = (req, res, next) => {
     try {
         const { authorization: authorizationHeader } = req.headers;
         if (!authorizationHeader) {
@@ -12,7 +13,7 @@ const verifyAuthToken = (req, res, next) => {
         }
         //@ts-ignore
         const token = authorizationHeader.split(' ')[1];
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
+        const decoded = authService.verifyToken(token);
         next(); // No error proceed to next middleware
     }
     catch (err) {
@@ -20,4 +21,4 @@ const verifyAuthToken = (req, res, next) => {
         // next(err) // This will be caught by error handler
     }
 };
-exports.default = verifyAuthToken;
+exports.default = AuthMiddleware;

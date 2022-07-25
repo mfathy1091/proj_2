@@ -12,26 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = void 0;
-const Auth_1 = __importDefault(require("../services/Auth"));
+const product_1 = __importDefault(require("../product"));
+const Auth_1 = __importDefault(require("../../services/Auth"));
 const authService = new Auth_1.default();
-const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password } = req.body;
-        const user = yield authService.login(email, password);
-        if (user) {
-            const token = authService.createToken(user);
-            res.json({
-                'token': token,
-                'user': user
-            });
-        }
-        else {
-            throw new Error('Unable to Login: wrong credentials');
-        }
-    }
-    catch (err) {
-        next(err);
-    }
+const productModel = new product_1.default();
+describe("Product model", () => {
+    beforeAll(() => {
+        authService.createAccount({ username: 'testUser', password: 'password123' });
+    });
+    it('Lists products', () => __awaiter(void 0, void 0, void 0, function* () {
+        const products = yield productModel.index();
+        expect();
+    }));
 });
-exports.login = login;
