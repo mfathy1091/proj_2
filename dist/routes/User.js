@@ -25,12 +25,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"));
-var controller = __importStar(require("../handlers/User"));
-var userRouter = express_1["default"].Router();
-userRouter.get('/', AuthMiddleware_1["default"], controller.index);
-userRouter.get('/:userId', AuthMiddleware_1["default"], controller.show);
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"));
+const controller = __importStar(require("../handlers/User"));
+const userRouter = express_1.default.Router();
+userRouter.get('/', AuthMiddleware_1.default, controller.index);
+userRouter.get('/:userId', AuthMiddleware_1.default, controller.show);
 userRouter.post('/', controller.create);
-exports["default"] = userRouter;
+userRouter.put('/:userId', AuthMiddleware_1.default, controller.update);
+userRouter.delete('/:userId', AuthMiddleware_1.default, controller.destroy);
+exports.default = userRouter;

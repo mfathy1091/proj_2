@@ -11,4 +11,9 @@ userRouter.get('/:userId', verifyAuthToken, controller.show)
 
 userRouter.post('/', controller.create)
 
+userRouter.put('/:userId', verifyAuthToken, controller.update)
+
+userRouter.delete('/:userId', verifyAuthToken, controller.destroy)
+
+
 export default userRouter;

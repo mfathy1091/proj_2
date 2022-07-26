@@ -7,13 +7,13 @@ const productRouter = express.Router();
 
 productRouter.get('/', controller.index)
 
-productRouter.get('/:productID', controller.show)
+productRouter.get('/:productId', controller.show)
 
 productRouter.post('/', verifyAuthToken, controller.create) 
 
-productRouter.put('/:productID', verifyAuthToken, controller.update) 
+productRouter.put('/:productId', verifyAuthToken, controller.update) 
 
-productRouter.delete('/:productID', verifyAuthToken, controller.destroy)
+productRouter.delete('/:productId', verifyAuthToken, controller.destroy)
 
 
 

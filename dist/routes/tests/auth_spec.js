@@ -35,23 +35,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Auth_1 = __importDefault(require("../Auth"));
-const User_1 = __importDefault(require("../../models/User"));
 const database_1 = __importDefault(require("../../config/database"));
 const hashingService = __importStar(require("../../utils/hashing"));
+const User_1 = __importDefault(require("../../models/User"));
+const supertest_1 = __importDefault(require("supertest"));
+const server_1 = __importDefault(require("../../server"));
+const request = (0, supertest_1.default)(server_1.default);
 const userModel = new User_1.default();
-const authService = new Auth_1.default();
-describe('Authentication Module', () => {
-    it('login method exists', () => {
-        expect(authService.login).toBeDefined();
-    });
-    let user;
+describe('Test Auth Endpoints', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();
         yield connection.query('DELETE FROM users');
         yield connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
         yield connection.release();
-        user = {
+        let user = {
             id: 1,
             first_name: 'John',
             last_name: 'Doe',
@@ -66,15 +63,13 @@ describe('Authentication Module', () => {
         yield connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
         yield connection.release();
     }));
-    it('login method returns the auth user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'password123');
-        expect(authUser).not.toBe(null);
-        expect(authUser === null || authUser === void 0 ? void 0 : authUser.email).toEqual(user.email);
-        const isPasswordValid = yield hashingService.isPasswordValid('password123', user.password);
-        expect(isPasswordValid).toBeTrue();
-    }));
-    it('login method returns null when credentials are wrong', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'wrongpassword');
-        expect(authUser).toBe(null);
+    it('login endpoint', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.post('/api/auth/login')
+            .send({
+            email: 'john@gmail.com',
+            password: 'password123'
+        });
+        expect(res.status).toBe(200);
+        expect(res.body.user.id).toEqual(1);
     }));
 });

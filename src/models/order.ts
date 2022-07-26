@@ -52,8 +52,8 @@ export default class OrderModel {
         try {
             
             const connection = await pool.connect();
-            const sql = "UPDATE orders SET status = $1, user_id = $2 WHERE id=$5";
-            const result = await connection.query(sql, [order.status, order.user_id]);
+            const sql = "UPDATE orders SET status = $1, user_id = $2 WHERE id=$3 RETURNING *";
+            const result = await connection.query(sql, [order.status, order.user_id, id]);
             connection.release();
             const updatedOrder = result.rows[0];
             return updatedOrder;
@@ -66,7 +66,7 @@ export default class OrderModel {
         try {
             
             const connection = await pool.connect();
-            const sql = "DELETE FROM orders WHERE id=$1";
+            const sql = "DELETE FROM orders WHERE id=$1 RETURNING *";
             const result = await connection.query(sql, [id]);
             connection.release();
             const order = result.rows[0];

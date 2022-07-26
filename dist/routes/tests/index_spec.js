@@ -12,26 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = void 0;
-const Auth_1 = __importDefault(require("../services/Auth"));
-const authService = new Auth_1.default();
-const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password } = req.body;
-        const user = yield authService.login(email, password);
-        if (user) {
-            const token = authService.createToken(user);
-            res.json({
-                'token': token,
-                'user': user
-            });
-        }
-        else {
-            throw new Error('Unable to Login: wrong credentials');
-        }
-    }
-    catch (err) {
-        next(err);
-    }
+const supertest_1 = __importDefault(require("supertest"));
+const server_1 = __importDefault(require("../../server"));
+const request = (0, supertest_1.default)(server_1.default);
+describe('Testing not exitent endpoint', () => {
+    it('returns 404 if endpoint is not existing', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.post('/api/wrong_endpoint');
+        expect(res.status).toBe(404);
+    }));
 });
-exports.login = login;

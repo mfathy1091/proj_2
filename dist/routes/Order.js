@@ -25,14 +25,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var controller = __importStar(require("../handlers/Order"));
-var orderRouter = express_1["default"].Router();
-orderRouter.get('/', controller.index);
-orderRouter.get('/:orderId', controller.show);
-orderRouter.post('/', controller.create);
-orderRouter.put('/:orderId', controller.update);
-orderRouter["delete"]('/:orderId', controller.destroy);
-orderRouter.post('/:orderId/products', controller.addProduct);
-exports["default"] = orderRouter;
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"));
+const controller = __importStar(require("../handlers/Order"));
+const orderRouter = express_1.default.Router();
+orderRouter.get('/', AuthMiddleware_1.default, controller.index);
+orderRouter.get('/:orderId', AuthMiddleware_1.default, controller.show);
+orderRouter.post('/', AuthMiddleware_1.default, controller.create);
+orderRouter.put('/:orderId', AuthMiddleware_1.default, controller.update);
+orderRouter.delete('/:orderId', AuthMiddleware_1.default, controller.destroy);
+orderRouter.post('/:orderId/products', AuthMiddleware_1.default, controller.addProduct);
+exports.default = orderRouter;

@@ -1,10 +1,10 @@
 import AuthService from '../Auth'
-import UserStore from '../../models/User'
+import UserModel from '../../models/User'
 import pool from '../../config/database'
 import User from '../../types/user'
 import * as hashingService from '../../utils/hashing'
 
-const store = new UserStore()
+const userModel = new UserModel()
 const authService = new AuthService();
 
 describe('Authentication Module', () => {
@@ -27,7 +27,7 @@ describe('Authentication Module', () => {
             email: 'john@gmail.com',
             password: await hashingService.hashPassword('password123')
         }
-        await store.create(user);
+        await userModel.create(user);
     })
 
     afterAll(async () => {

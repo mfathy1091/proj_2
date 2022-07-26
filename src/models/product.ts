@@ -42,11 +42,11 @@ export default class ProductModel {
         }
     }
 
-    async update(id: string, product: Omit<Product, "id">): Promise<Product> {
+    async update(productId: string, product: Omit<Product, "id">): Promise<Product> {
         try {
             const connection = await pool.connect();
-            const sql = "UPDATE products SET title = $1, author = $2, total_pages = $3, summary =$4 WHERE id=$5";
-            const result = await connection.query(sql, [product.name, product.price]);
+            const sql = "UPDATE products SET name = $1, price = $2 WHERE id=$3 RETURNING *";
+            const result = await connection.query(sql, [product.name, product.price, productId]);
             connection.release();
             const updatedProduct = result.rows[0];
             return updatedProduct;
@@ -55,16 +55,16 @@ export default class ProductModel {
         }
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(productID: string): Promise<void> {
         try {
             const connection = await pool.connect();
-            const sql = "DELETE FROM products WHERE id=$1";
-            const result = await connection.query(sql, [id]);
+            const sql = "DELETE FROM products WHERE id=$1 RETURNING *";
+            const result = await connection.query(sql, [productID]);
             connection.release();
             const product = result.rows[0];
             return product;
         } catch (err) {
-            throw new Error(`Could not delete product ${id}. Error:  ${(err as Error).message}`)
+            throw new Error(`Could not delete product ${productID}. Error:  ${(err as Error).message}`)
         }
     }
 

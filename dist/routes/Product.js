@@ -25,14 +25,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"));
-var controller = __importStar(require("../handlers/Product"));
-var productRouter = express_1["default"].Router();
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"));
+const controller = __importStar(require("../handlers/Product"));
+const productRouter = express_1.default.Router();
 productRouter.get('/', controller.index);
-productRouter.get('/:productID', controller.show);
-productRouter.post('/', AuthMiddleware_1["default"], controller.create);
-productRouter.put('/:productID', AuthMiddleware_1["default"], controller.update);
-productRouter["delete"]('/:productID', AuthMiddleware_1["default"], controller.destroy);
-exports["default"] = productRouter;
+productRouter.get('/:productId', controller.show);
+productRouter.post('/', AuthMiddleware_1.default, controller.create);
+productRouter.put('/:productId', AuthMiddleware_1.default, controller.update);
+productRouter.delete('/:productId', AuthMiddleware_1.default, controller.destroy);
+exports.default = productRouter;

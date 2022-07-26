@@ -35,17 +35,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Auth_1 = __importDefault(require("../Auth"));
-const User_1 = __importDefault(require("../../models/User"));
 const database_1 = __importDefault(require("../../config/database"));
 const hashingService = __importStar(require("../../utils/hashing"));
+const User_1 = __importDefault(require("../../models/User"));
+const supertest_1 = __importDefault(require("supertest"));
+const server_1 = __importDefault(require("../../server"));
+const request = (0, supertest_1.default)(server_1.default);
 const userModel = new User_1.default();
-const authService = new Auth_1.default();
-describe('Authentication Module', () => {
-    it('login method exists', () => {
-        expect(authService.login).toBeDefined();
-    });
+describe('Test User Endpoints', () => {
     let user;
+    let token;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();
         yield connection.query('DELETE FROM users');
@@ -59,6 +58,12 @@ describe('Authentication Module', () => {
             password: yield hashingService.hashPassword('password123')
         };
         yield userModel.create(user);
+        const res = yield request.post('/api/auth/login')
+            .send({
+            email: 'john@gmail.com',
+            password: 'password123'
+        });
+        token = res.body.token;
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();
@@ -66,15 +71,44 @@ describe('Authentication Module', () => {
         yield connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
         yield connection.release();
     }));
-    it('login method returns the auth user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'password123');
-        expect(authUser).not.toBe(null);
-        expect(authUser === null || authUser === void 0 ? void 0 : authUser.email).toEqual(user.email);
-        const isPasswordValid = yield hashingService.isPasswordValid('password123', user.password);
-        expect(isPasswordValid).toBeTrue();
+    it('Index endpoint retruns 401 status if Token not provided', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.get('/api/users/');
+        expect(res.status).toBe(401);
     }));
-    it('login method returns null when credentials are wrong', () => __awaiter(void 0, void 0, void 0, function* () {
-        const authUser = yield authService.login(user.email, 'wrongpassword');
-        expect(authUser).toBe(null);
+    it('Index endpoint retruns 200, when token is provided', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.get('/api/users/')
+            .set('Authorization', `Bearer ${token}`);
+        expect(res.status).toBe(200);
+    }));
+    it('Show endpoint retruns 200, when token is provided', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.get('/api/users/1')
+            .set('Authorization', `Bearer ${token}`);
+        expect(res.status).toBe(200);
+        expect(res.body.id).toBe(1);
+    }));
+    it('Create endpoint', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.post('/api/users/').send({
+            id: 2,
+            first_name: 'Mohamed',
+            last_name: 'Fathy',
+            email: 'fathy@gmail.com',
+            password: yield hashingService.hashPassword('password123')
+        });
+        expect(res.status).toBe(201);
+    }));
+    it('Update endpoint', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.put('/api/users/2').send({
+            id: 2,
+            first_name: 'Mohamed',
+            last_name: 'Salah',
+            email: 'fathy@gmail.com',
+            password: yield hashingService.hashPassword('password123')
+        }).set('Authorization', `Bearer ${token}`);
+        expect(res.body.last_name).toBe('Salah');
+    }));
+    it('Delete endpoint', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.delete('/api/users/1')
+            .set('Authorization', `Bearer ${token}`);
+        expect(res.body.id).toBe(1);
     }));
 });

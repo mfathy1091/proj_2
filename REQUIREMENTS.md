@@ -9,7 +9,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Show >> 'products/:productId' [GET] 
 - Create [token required] >> 'products' [POST] 
 - Update [token required] >> 'products/:productId' [PUT] 
-- Update [token required] >> 'products/:productId' [DELETE] 
+- Delete [token required] >> 'products/:productId' [DELETE] 
+
+#### Orders
+- Index [token required] >> 'orders' [GET] 
+- Show [token required] >> 'orders/:OrderId' [GET] 
+- Create [token required] >> 'orders' [POST] 
+- Update [token required] >> 'orders/:OrderId' [PUT] 
+- Delete [token required] >> 'orders/:OrderId' [DELETE] 
 
 #### Users
 - Index >> 'users' [GET] 
@@ -34,6 +41,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - id >> SERIAL PRIMARY KEY
 - user_id >> bigint REFERENCES users(id)
 - status (of order: active or complete) >> VARCHAR(25)
+
 
 #### Order_product
 

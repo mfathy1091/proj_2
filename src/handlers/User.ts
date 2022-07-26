@@ -40,14 +40,35 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-const destroy = async (req: Request, res: Response) => {
-    const deleted = await userModel.delete(req.body.id)
-    res.json(deleted)
+const update = async (req: Request, res: Response, next:NextFunction) => {
+    const user: Omit<User, "id"> = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        password: req.body.password,
+    }
+    try {
+        const newUser = await userModel.update(req.params.userId, user)
+        res.json(newUser)
+    } catch(err) {
+        next(err)    
+    }
+}
+
+const destroy = async (req: Request, res: Response, next:NextFunction) => {
+    try {
+        const deletedUser = await userModel.delete(req.params.userId)
+        res.json(deletedUser)
+    } catch(err) {
+        next(err)    
+    }
+    
 }
 
 export {
     index,
     show,
     create,
+    update,
     destroy,
 }

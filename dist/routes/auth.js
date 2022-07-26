@@ -25,9 +25,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var controller = __importStar(require("../handlers/Auth"));
-var authRouter = express_1["default"].Router();
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const controller = __importStar(require("../handlers/Auth"));
+const authRouter = express_1.default.Router();
 authRouter.post('/login', controller.login);
-exports["default"] = authRouter;
+exports.default = authRouter;

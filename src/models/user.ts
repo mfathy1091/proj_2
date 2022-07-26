@@ -47,11 +47,11 @@ export default class UserModel {
     }
 
 
-    async update(id: string, u: User): Promise<User> {
+    async update(userId: string, u: User): Promise<User> {
         try {
             const connection = await pool.connect();
-            const sql = "UPDATE users SET first_name = $1, last_name = $2, email = $3 WHERE id=$5";
-            const result = await connection.query(sql, [u.first_name, u.last_name, u.email]);
+            const sql = "UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4 WHERE id=$5 RETURNING *";
+            const result = await connection.query(sql, [u.first_name, u.last_name, u.email, u.password, userId]);
             connection.release();
             const user = result.rows[0];
             return user;
@@ -60,16 +60,16 @@ export default class UserModel {
         }
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(userId: string): Promise<void> {
         try {
             const connection = await pool.connect();
-            const sql = "DELETE FROM users WHERE id=$1";
-            const result = await connection.query(sql, [id]);
+            const sql = "DELETE FROM users WHERE id=$1 RETURNING *";
+            const result = await connection.query(sql, [userId]);
             connection.release();
             const user = result.rows[0];
             return user;
         } catch (err) {
-            throw new Error(`Could not delete user ${id}. Error:  ${(err as Error).message}`)
+            throw new Error(`Could not delete user ${userId}. Error:  ${(err as Error).message}`)
         }
     }
 

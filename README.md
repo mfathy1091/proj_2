@@ -1,17 +1,14 @@
 # Storefront Backend Project
 
+## A) Setup preparation
+### 1- package installation
+run `npm install`
 
-## how to setup and connect to the database
-* go to: 'http://127.0.0.1:3000'
-
-## ports the backend and database
+### 2- ports the backend and database
 * Backend port: 3000
 * Database port: 5432
 
-## package installation
-run `npm install`
-
-## .env variables
+### 3- .env variables
 NODE_ENV = dev
 NODE_PORT = 3000
 
@@ -26,8 +23,9 @@ BCRYPT_PASSWORD=speak-friend-and-enter
 SALT_ROUND=10
 TOKEN_SECRET=secret123
 
+-----
 
-## Database Setup
+## B) Database Setup
 
 ### 1- Create postgres User
 ```sh
@@ -49,3 +47,11 @@ GRANT ALL PRIVILEGES ON DATABASE store_front_test TO postgres;
 
 ### 4- Run migration
 db-migrate up
+
+
+----
+
+## C) Starting the server
+
+* go to: 'http://localhost:3000/api/'
+* then use the endpoints (Exists in the REQUIREMENTS.md file)

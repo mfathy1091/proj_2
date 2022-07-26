@@ -11,7 +11,7 @@ const index = async (_req: Request, res: Response) => {
 }
 
 const show = async (req: Request, res: Response) => {
-    const product = await productModel.show(req.params.productID)
+    const product = await productModel.show(req.params.productId)
     res.json(product)
 }
 
@@ -35,7 +35,7 @@ const update = async (req: Request, res: Response, next:NextFunction) => {
         price: req.body.price,
     }
     try {
-        const newProduct = await productModel.update(req.params.productID, product)
+        const newProduct = await productModel.update(req.params.productId, product)
         res.json(newProduct)
     } catch(err) {
         next(err)    
@@ -43,7 +43,7 @@ const update = async (req: Request, res: Response, next:NextFunction) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await productModel.delete(req.body.id)
+    const deleted = await productModel.delete(req.params.productId)
     res.json(deleted)
 }
 

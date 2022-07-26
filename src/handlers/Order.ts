@@ -10,41 +10,44 @@ const index = async (_req: Request, res: Response) => {
 }
 
 const show = async (req: Request, res: Response) => {
-    const order = await orderModel.show(req.params.orderID)
+    const order = await orderModel.show(req.params.orderId)
     res.json(order)
 }
 
-const create = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response, next: NextFunction) => {
     const order: Order = {
         status: req.body.status,
         user_id: req.body.user_id,
     }
     try {
         const newOrder = await orderModel.create(order)
+        res.status(201)
         res.json(newOrder)
     } catch(err) {
-        res.status(500)
-        res.json(err)    
+        next(err)
     }
 }
 
-const update = async (req: Request, res: Response) => {
+const update = async (req: Request, res: Response, next: NextFunction) => {
     const order: Order = {
         status: req.body.status,
         user_id: req.body.user_id,
     }
     try {
-        const updatedOrder = await orderModel.update(req.params.orderID, order)
+        const updatedOrder = await orderModel.update(req.params.orderId, order)
         res.json(updatedOrder)
     } catch(err) {
-        res.status(500)
-        res.json(err)    
+        next(err)
     }
 }
 
-const destroy = async (req: Request, res: Response) => {
-    const deleted = await orderModel.delete(req.body.id)
+const destroy = async (req: Request, res: Response, next: NextFunction) => {
+try {
+    const deleted = await orderModel.delete(req.params.orderId)
     res.json(deleted)
+    } catch (err) {
+        next(err)
+    }
 }
 
 const addProduct = async (req: Request, res: Response, next:NextFunction) => {
