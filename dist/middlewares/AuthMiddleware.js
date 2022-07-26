@@ -2,21 +2,21 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const Auth_1 = __importDefault(require("../services/Auth"));
-const authService = new Auth_1.default;
-const AuthMiddleware = (req, res, next) => {
+exports.__esModule = true;
+var Auth_1 = __importDefault(require("../services/Auth"));
+var authService = new Auth_1["default"];
+var AuthMiddleware = function (req, res, next) {
     try {
-        const { authorization: authorizationHeader } = req.headers;
+        var authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
             return res.status(401).send('Not Authorized');
         }
-        const token = authorizationHeader.split(' ')[1];
-        const decoded = authService.verifyToken(token);
+        var token = authorizationHeader.split(' ')[1];
+        var decoded = authService.verifyToken(token);
         next(); // No error proceed to next middleware
     }
     catch (err) {
         return res.status(401).send('Not Authorized');
     }
 };
-exports.default = AuthMiddleware;
+exports["default"] = AuthMiddleware;

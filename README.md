@@ -46,3 +46,6 @@ CREATE DATABASE store_front_test;
 GRANT ALL PRIVILEGES ON DATABASE store_front TO postgres;
 GRANT ALL PRIVILEGES ON DATABASE store_front_test TO postgres;
 ```
+
+### 4- Run migration
+db-migrate up

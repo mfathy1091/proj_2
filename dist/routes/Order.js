@@ -25,14 +25,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const controller = __importStar(require("../controllers/OrderController"));
-const orderRouter = express_1.default.Router();
+exports.__esModule = true;
+var express_1 = __importDefault(require("express"));
+var controller = __importStar(require("../handlers/Order"));
+var orderRouter = express_1["default"].Router();
 orderRouter.get('/', controller.index);
 orderRouter.get('/:orderId', controller.show);
 orderRouter.post('/', controller.create);
 orderRouter.put('/:orderId', controller.update);
-orderRouter.delete('/:orderId', controller.destroy);
+orderRouter["delete"]('/:orderId', controller.destroy);
 orderRouter.post('/:orderId/products', controller.addProduct);
-exports.default = orderRouter;
+exports["default"] = orderRouter;

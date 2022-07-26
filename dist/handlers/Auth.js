@@ -39,31 +39,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.isPasswordValid = exports.hashPassword = void 0;
-var bcrypt_1 = __importDefault(require("bcrypt"));
-var saltRounds = process.env.SALT_ROUND;
-var pepper = process.env.BCRYPT_PASSWORD;
-var hashPassword = function (password) { return __awaiter(void 0, void 0, void 0, function () {
-    var hashedPassword;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, bcrypt_1["default"].hash(password + pepper, parseInt(saltRounds))];
+exports.login = void 0;
+var Auth_1 = __importDefault(require("../services/Auth"));
+var authService = new Auth_1["default"]();
+var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, user, token, err_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, authService.login(email, password)];
             case 1:
-                hashedPassword = _a.sent();
-                return [2 /*return*/, hashedPassword];
+                user = _b.sent();
+                if (user) {
+                    token = authService.createToken(user);
+                    res.json({
+                        'token': token,
+                        'user': user
+                    });
+                }
+                else {
+                    throw new Error('Unable to Login: wrong credentials');
+                }
+                return [3 /*break*/, 3];
+            case 2:
+                err_1 = _b.sent();
+                next(err_1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.hashPassword = hashPassword;
-var isPasswordValid = function (password, hash) { return __awaiter(void 0, void 0, void 0, function () {
-    var isPasswordValid;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, bcrypt_1["default"].compare(password + pepper, hash)];
-            case 1:
-                isPasswordValid = _a.sent();
-                return [2 /*return*/, isPasswordValid];
-        }
-    });
-}); };
-exports.isPasswordValid = isPasswordValid;
+exports.login = login;

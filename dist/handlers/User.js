@@ -39,31 +39,83 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.isPasswordValid = exports.hashPassword = void 0;
-var bcrypt_1 = __importDefault(require("bcrypt"));
-var saltRounds = process.env.SALT_ROUND;
-var pepper = process.env.BCRYPT_PASSWORD;
-var hashPassword = function (password) { return __awaiter(void 0, void 0, void 0, function () {
-    var hashedPassword;
+exports.destroy = exports.create = exports.show = exports.index = void 0;
+var User_1 = __importDefault(require("../models/User"));
+var hashing_1 = require("../utils/hashing");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var userModel = new User_1["default"]();
+var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, bcrypt_1["default"].hash(password + pepper, parseInt(saltRounds))];
+            case 0: return [4 /*yield*/, userModel.index()];
+            case 1:
+                users = _a.sent();
+                res.json(users);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.index = index;
+var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, userModel.show(req.params.userId)];
+            case 1:
+                user = _a.sent();
+                res.json(user);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.show = show;
+var create = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var hashedPassword, user, newUser, token, err_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, hashing_1.hashPassword)(req.body.password)];
             case 1:
                 hashedPassword = _a.sent();
-                return [2 /*return*/, hashedPassword];
+                user = {
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    email: req.body.email,
+                    password: hashedPassword
+                };
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 4, , 5]);
+                return [4 /*yield*/, userModel.create(user)];
+            case 3:
+                newUser = _a.sent();
+                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
+                res.status(201);
+                res.json({
+                    'message': 'Successfuly created!',
+                    'user': user,
+                    'token': token
+                });
+                return [3 /*break*/, 5];
+            case 4:
+                err_1 = _a.sent();
+                next(err_1);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
-exports.hashPassword = hashPassword;
-var isPasswordValid = function (password, hash) { return __awaiter(void 0, void 0, void 0, function () {
-    var isPasswordValid;
+exports.create = create;
+var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var deleted;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, bcrypt_1["default"].compare(password + pepper, hash)];
+            case 0: return [4 /*yield*/, userModel["delete"](req.body.id)];
             case 1:
-                isPasswordValid = _a.sent();
-                return [2 /*return*/, isPasswordValid];
+                deleted = _a.sent();
+                res.json(deleted);
+                return [2 /*return*/];
         }
     });
 }); };
-exports.isPasswordValid = isPasswordValid;
+exports.destroy = destroy;
