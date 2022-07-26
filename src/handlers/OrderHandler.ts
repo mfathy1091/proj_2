@@ -4,14 +4,23 @@ import Order from '../types/order'
 
 const orderModel = new OrderModel()
 
-const index = async (_req: Request, res: Response) => {
-    const orders = await orderModel.index()
-    res.json(orders)
+const index = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const orders = await orderModel.index()
+        res.json(orders)
+    } catch (err) {
+        next(err)
+    }
+
 }
 
-const show = async (req: Request, res: Response) => {
-    const order = await orderModel.show(req.params.orderId)
-    res.json(order)
+const show = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const order = await orderModel.show(req.params.orderId)
+        res.json(order)
+    } catch (err) {
+        next(err)
+    }
 }
 
 const create = async (req: Request, res: Response, next: NextFunction) => {

@@ -15,40 +15,55 @@ describe('Authentication Module', () => {
     let user: User
 
     beforeAll(async () => {
-        const connection = await pool.connect();
-        await connection.query('DELETE FROM users');
-        await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
-        await connection.release();
-        
-        user = {
-            id: 1,
-            first_name: 'John',
-            last_name: 'Doe',
-            email: 'john@gmail.com',
-            password: await hashingService.hashPassword('password123')
+        try {
+            const connection = await pool.connect();
+            await connection.query('DELETE FROM users');
+            await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
+            await connection.release();
+            
+            user = {
+                id: 1,
+                first_name: 'John',
+                last_name: 'Doe',
+                email: 'john@gmail.com',
+                password: await hashingService.hashPassword('password123')
+            }
+            await userModel.create(user);
+        } catch (error) {
+            console.log(error)
         }
-        await userModel.create(user);
     })
 
     afterAll(async () => {
-        const connection = await pool.connect();
-        await connection.query('DELETE FROM users');
-        await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
-        await connection.release();
+        try {
+            const connection = await pool.connect();
+            await connection.query('DELETE FROM users');
+            await connection.query('ALTER SEQUENCE users_id_seq RESTART WITH 1');
+            await connection.release();
+        } catch (error) {
+            console.log(error)
+        }
     })
 
     it('login method returns the auth user', async() => {
-        
-        const authUser = await authService.login(user.email, 'password123')            
-        expect(authUser).not.toBe(null)
-        expect(authUser?.email).toEqual(user.email)
-        const isPasswordValid = await hashingService.isPasswordValid('password123', user.password as string)
-        expect(isPasswordValid).toBeTrue();
+        try {
+            const authUser = await authService.login(user.email, 'password123')            
+            expect(authUser).not.toBe(null)
+            expect(authUser?.email).toEqual(user.email)
+            const isPasswordValid = await hashingService.isPasswordValid('password123', user.password as string)
+            expect(isPasswordValid).toBeTrue();
+        } catch (error) {
+            console.log(error)
+        }
     });
 
     it('login method returns null when credentials are wrong', async() => {
-        const authUser = await authService.login(user.email, 'wrongpassword')
-        expect(authUser).toBe(null)
+        try {
+            const authUser = await authService.login(user.email, 'wrongpassword')
+            expect(authUser).toBe(null)
+        } catch (error) {
+            console.log(error)
+        }
     });
 
 

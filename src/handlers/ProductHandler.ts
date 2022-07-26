@@ -5,14 +5,22 @@ import Product from '../types/product'
 
 const productModel = new ProductModel()
 
-const index = async (_req: Request, res: Response) => {
-    const products = await productModel.index()
-    res.json(products)
+const index = async (_req: Request, res: Response, next:NextFunction) => {
+    try {
+        const products = await productModel.index()
+        res.json(products)
+    } catch (err) {
+        next(err)
+    }
 }
 
-const show = async (req: Request, res: Response) => {
-    const product = await productModel.show(req.params.productId)
-    res.json(product)
+const show = async (req: Request, res: Response, next:NextFunction) => {
+    try {
+        const product = await productModel.show(req.params.productId)
+        res.json(product)
+    } catch (err) {
+        next(err)
+    }
 }
 
 const create = async (req: Request, res: Response, next:NextFunction) => {
@@ -42,9 +50,13 @@ const update = async (req: Request, res: Response, next:NextFunction) => {
     }
 }
 
-const destroy = async (req: Request, res: Response) => {
-    const deleted = await productModel.delete(req.params.productId)
-    res.json(deleted)
+const destroy = async (req: Request, res: Response, next:NextFunction) => {
+    try {
+        const deleted = await productModel.delete(req.params.productId)
+        res.json(deleted)
+    } catch (err) {
+        next(err)
+    }
 }
 
 export {
