@@ -1,5 +1,5 @@
 import pool from '../../config/database'
-import ProductModel from '../Product'
+import ProductModel from '../ProductModel'
 
 const productModel = new ProductModel()
 

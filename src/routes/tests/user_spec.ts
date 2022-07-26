@@ -1,7 +1,7 @@
 import pool from '../../config/database'
 import * as hashingService from '../../utils/hashing'
 
-import UserModel from '../../models/User'
+import UserModel from '../../models/UserModel'
 
 import supertest from 'supertest';
 import app from '../../server';

@@ -36,9 +36,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../config/database"));
-const User_1 = __importDefault(require("../User"));
+const UserModel_1 = __importDefault(require("../UserModel"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const userModel = new User_1.default();
+const userModel = new UserModel_1.default();
 describe("User Model >>", () => {
     describe('methods exists', () => {
         it('should have an index method', () => {

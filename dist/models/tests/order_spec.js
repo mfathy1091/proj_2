@@ -36,11 +36,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../config/database"));
-const Order_1 = __importDefault(require("../Order"));
-const User_1 = __importDefault(require("../User"));
+const OrderModel_1 = __importDefault(require("../OrderModel"));
+const UserModel_1 = __importDefault(require("../UserModel"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const orderModel = new Order_1.default();
-const userModel = new User_1.default();
+const orderModel = new OrderModel_1.default();
+const userModel = new UserModel_1.default();
 describe("Order Model", () => __awaiter(void 0, void 0, void 0, function* () {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();

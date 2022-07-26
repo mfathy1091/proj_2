@@ -1,6 +1,6 @@
 import pool from '../../config/database'
-import OrderModel from '../Order'
-import UserModel from '../User'
+import OrderModel from '../OrderModel'
+import UserModel from '../UserModel'
 import * as hashingService from '../../utils/hashing'
 
 const orderModel = new OrderModel()

@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../config/database"));
-const Product_1 = __importDefault(require("../Product"));
-const productModel = new Product_1.default();
+const ProductModel_1 = __importDefault(require("../ProductModel"));
+const productModel = new ProductModel_1.default();
 describe("Product Model", () => __awaiter(void 0, void 0, void 0, function* () {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();

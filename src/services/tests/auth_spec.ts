@@ -1,5 +1,5 @@
-import AuthService from '../Auth'
-import UserModel from '../../models/User'
+import AuthService from '../AuthService'
+import UserModel from '../../models/UserModel'
 import pool from '../../config/database'
 import User from '../../types/user'
 import * as hashingService from '../../utils/hashing'

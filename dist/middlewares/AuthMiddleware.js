@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Auth_1 = __importDefault(require("../services/Auth"));
-const authService = new Auth_1.default;
+const AuthService_1 = __importDefault(require("../services/AuthService"));
+const authService = new AuthService_1.default;
 const AuthMiddleware = (req, res, next) => {
     try {
         const { authorization: authorizationHeader } = req.headers;

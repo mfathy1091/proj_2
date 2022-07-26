@@ -1,5 +1,5 @@
 import pool from '../../config/database'
-import UserModel from '../User'
+import UserModel from '../UserModel'
 import * as hashingService from '../../utils/hashing'
 
 const userModel = new UserModel()

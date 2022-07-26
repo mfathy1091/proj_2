@@ -1,15 +1,15 @@
 import pool from '../../config/database'
 import * as hashingService from '../../utils/hashing'
 
-import UserModel from '../../models/UserModel'
+import UserStore from '../../models/UserModel'
 
 import supertest from 'supertest';
 import app from '../../server';
 
 const request = supertest(app);
-const userModel = new UserModel()
+const userModel = new UserStore()
 
-describe('Test Auth Endpoints', () => {
+describe('Test endpoint responses', () => {
     beforeAll(async () => {
         const connection = await pool.connect();
         await connection.query('DELETE FROM users');
@@ -33,6 +33,10 @@ describe('Test Auth Endpoints', () => {
         await connection.release();
     })
 
+    it('returns 404 if endpoint is wrong', async () => {
+        const res = await request.post('/api/auth/wrong_endpoint');
+        expect(res.status).toBe(404);
+    });
 
     it('login endpoint', async () => {
         const res = await request.post('/api/auth/login')
@@ -42,6 +46,5 @@ describe('Test Auth Endpoints', () => {
                     });
 
         expect(res.status).toBe(200);
-        expect(res.body.user.id).toEqual(1);
     });
 });

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import OrderModel from '../models/Order'
+import OrderModel from '../models/OrderModel'
 import Order from '../types/order'
 
 const orderModel = new OrderModel()

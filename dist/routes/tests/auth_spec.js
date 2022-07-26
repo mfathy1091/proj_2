@@ -37,11 +37,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../config/database"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const User_1 = __importDefault(require("../../models/User"));
+const UserModel_1 = __importDefault(require("../../models/UserModel"));
 const supertest_1 = __importDefault(require("supertest"));
 const server_1 = __importDefault(require("../../server"));
 const request = (0, supertest_1.default)(server_1.default);
-const userModel = new User_1.default();
+const userModel = new UserModel_1.default();
 describe('Test Auth Endpoints', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const connection = yield database_1.default.connect();

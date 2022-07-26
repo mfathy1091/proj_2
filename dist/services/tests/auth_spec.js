@@ -35,12 +35,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Auth_1 = __importDefault(require("../Auth"));
-const User_1 = __importDefault(require("../../models/User"));
+const AuthService_1 = __importDefault(require("../AuthService"));
+const UserModel_1 = __importDefault(require("../../models/UserModel"));
 const database_1 = __importDefault(require("../../config/database"));
 const hashingService = __importStar(require("../../utils/hashing"));
-const userModel = new User_1.default();
-const authService = new Auth_1.default();
+const userModel = new UserModel_1.default();
+const authService = new AuthService_1.default();
 describe('Authentication Module', () => {
     it('login method exists', () => {
         expect(authService.login).toBeDefined();

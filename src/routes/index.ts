@@ -1,8 +1,8 @@
 import express from 'express';
-import userRouter from './User';
-import authRouter from './Auth';
-import orderRouter from './Order';
-import productRouter from './Product';
+import userRouter from './UserRoutes';
+import authRouter from './AuthRoutes';
+import orderRouter from './OrderRoutes';
+import productRouter from './ProductRoutes';
 
 const router = express.Router();
 

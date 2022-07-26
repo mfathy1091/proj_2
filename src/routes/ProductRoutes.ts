@@ -1,7 +1,7 @@
 import express from 'express';
 import verifyAuthToken from '../middlewares/AuthMiddleware'
 
-import * as controller from '../handlers/Product'
+import * as controller from '../handlers/ProductHandler'
 
 const productRouter = express.Router();
 

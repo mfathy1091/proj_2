@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import ProductModel from '../models/Product'
+import ProductModel from '../models/ProductModel'
 
 import Product from '../types/product'
 

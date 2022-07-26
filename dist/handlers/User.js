@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroy = exports.update = exports.create = exports.show = exports.index = void 0;
-const User_1 = __importDefault(require("../models/User"));
+const UserModel_1 = __importDefault(require("../models/UserModel"));
 const hashing_1 = require("../utils/hashing");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const userModel = new User_1.default();
+const userModel = new UserModel_1.default();
 const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield userModel.index();
     res.json(users);
